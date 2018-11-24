@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page!</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+
+            $("#BtnGetPaises").click(function ()
+            {
+                //ajax shit
+                GetPaises();
+            });
+
+
+			$("#BtnGetClientes").click(function(){
+
+			    //ajax shit
+			    GetClientes();
+				
+			});
+
+        });
+
+
+
+        function GetPaises() {
+
+            var strParams = {
+                StrCodPais: "test"
+            };
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                //url: "/WsQuantify/WebServiceQuantify.asmx/GetPaises",
+                url: "/WebServiceQuantify.asmx/GetPaises",
+                //data: JSON.stringify(strParams),
+                //headers: { "Authorization": MisDatos.HashSesion },
+                //dataType: "json",
+                error: function (msg)
+                {
+                    console.log("Error");
+                    console.log(msg);
+                },
+                success: function (data) {
+                    var rs = $.parseJSON(data["d"]);
+                    // Select Siniestro
+
+                    var Datos = JSON.stringify(rs);
+                    $("#DivResult").html(Datos);
+
+                   
+                }
+            });
+
+        }
+
+
+		function GetClientes()
+		{
+		   var strParams = {
+                StrCodPais: "pe"
+            };
+
+			$.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+			    //url: "http://localhost/WsQuantify/WebServiceQuantify.asmx/GetBusinessPatners",
+                url: "/WebServiceQuantify.asmx/GetBusinessPatners",
+                data: JSON.stringify(strParams),
+                //headers: { "Authorization": MisDatos.HashSesion },
+                dataType: "json",
+                error: function (msg)
+                {
+                    console.log("Error");
+                    console.log(msg);
+                },
+                success: function (data) {
+                    var rs = $.parseJSON(data["d"]);
+                    var Datos = JSON.stringify(rs);
+                    $("#DivResult").html(Datos);
+                }
+            });
+
+
+		}
+
+    </script>
+</head>
+<body>
+    <div class="alert alert-success" role="alert">
+        <div>Pagina de Test de Servicios Asmx</div>
+    </div>
+
+    <div id="menu" style="padding:20px;">
+        <div>
+            <button id="BtnGetPaises" type="button" class="btn btn-primary">Obtener Paises</button>
+
+            <button id="BtnGetClientes" type="button" class="btn btn-primary">Obtener Clientes</button>
+
+        </div>
+
+        <br />
+
+        <div class="alert alert-info" role="alert">Resutados:</div>
+        <div class="alert alert-info" role="alert" style="margin-top:2px;">
+            <div id="DivResult">
+                #some data;
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>
