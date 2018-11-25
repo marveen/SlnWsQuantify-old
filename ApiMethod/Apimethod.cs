@@ -93,18 +93,6 @@ namespace Quantify.API
 
 
 
-
-
-                    /*
-                     *Dim prods As ProductCollection = ProductCollection.GetProductCollection(ProductType.Product)
-
-        For Each prod As Product In prods
-            Console.WriteLine(prod.PartNumber + " " + prod.Description)
-        Next
-                     *
-                     *
-                     * */
-
                 }
             }
 
