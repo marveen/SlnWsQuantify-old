@@ -33,3 +33,4 @@ C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\es\Avontu
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\it\Avontus.Rental.Utility.resources.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\nl\Avontus.Rental.Utility.resources.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\zh-Hant\Avontus.Rental.Utility.resources.dll
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Debug\Quantify.API.csprojResolveAssemblyReference.cache

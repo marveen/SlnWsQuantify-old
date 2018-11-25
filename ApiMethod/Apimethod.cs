@@ -45,12 +45,51 @@ namespace Quantify.API
                 if (success)
                 {
                     AvontusUser AvUser = AvontusUser.GetUser(StrUsrQtfy);
-                    //BusinessPartnerComboList BpatList = BusinessPartnerComboList.GetCustomerComboList(Guid.Empty, ActiveStatus.Active, ActiveStatus.Active, false, false);
+                    BusinessPartnerComboList BpatList = BusinessPartnerComboList.GetCustomerComboList(Guid.Empty, ActiveStatus.Active, ActiveStatus.Active, false, false);
 
-                    ProductCollection ProdList = ProductCollection.GetProductCollection(ProductType.All);
+                    ProductCollection ProdList = ProductCollection.GetProductCollection(ProductType.Product);
 
                     Int32 IntProdlist = 0;
                     IntProdlist = ProdList.Count;
+
+                    String StrProductname;
+                    foreach (Product PivotProduct in ProdList)
+                    {
+                        StrProductname = PivotProduct.PartNumber; 
+
+
+
+                    }
+
+
+
+                    StockedProductList StockedProductList = StockedProductList.GetStockedProductList(Guid.Empty, Guid.Empty, ProductType.Product);
+
+
+
+                    //StockedProductList StockedProductList2 = StockedProductList.get
+
+                    IntProdlist = StockedProductList.Count;
+                    foreach (StockedProductListItem PivotProduct in StockedProductList)
+                    {
+                        StrProductname = PivotProduct.PartNumber;
+
+
+
+                    }
+
+
+
+                    // System.Web.UI.WebControls.TreeView tvOrganization = new System.Web.UI.WebControls.TreeView();
+                    System.Windows.Forms.TreeView tvOrganization = new System.Windows.Forms.TreeView();
+
+                    StockingLocationOrganization orgTree = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
+                    orgTree.BuildTreeView(tvOrganization, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.PrimaryTradingPartnerID);
+
+                    System.Windows.Forms.TreeNode oMainNode = tvOrganization.Nodes[0];
+
+                    IntProdlist = StockedProductList.Count;
+
 
 
 
