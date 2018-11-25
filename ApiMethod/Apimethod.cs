@@ -326,7 +326,7 @@ namespace Quantify.API
 
                 DataColumn DatetColumn = new DataColumn("Datet", typeof(DateTime));
 
-                //DataColumn qweqwec sadasdsad  usinessPartnerIDColumn = new DataColumn("BusinessPartnerID", typeof(string));                
+                //DataColumn   BusinessPartnerIDColumn = new DataColumn("BusinessPartnerID", typeof(string));                
                 idColumn.AutoIncrement = true;
 
 
