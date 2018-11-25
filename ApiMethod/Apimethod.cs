@@ -25,12 +25,54 @@ namespace Quantify.API
         {
             String StrSalida ="";
 
-            try{}
+            try{
+
+                AvontusPrincipal.Logout();
+                string Conex = Avontus.Rental.Library.Settings.CommonConfigurationSettings.ConnectionString;
+                string strdbname;
+                strdbname = "quantify-srv02\\SQLUN" + StrCodPais;
+                System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+                builder.ConnectionString = Conex;
+                builder.DataSource = strdbname;
+
+                //Base de Datos Rotativa                                
+                Avontus.Rental.Library.Settings.CommonConfigurationSettings.ConnectionString = builder.ConnectionString;
+                String StrUsrQtfy = StrUser; // ConfigurationManager.AppSettings["UsrQtfy"];
+                String StrPassQtfy = Strpass; // ConfigurationManager.AppSettings["PassQtfy"];
+                bool success = AvontusPrincipal.Login(StrUsrQtfy, StrPassQtfy);
 
 
-             catch (Exception ex)
+                if (success)
+                {
+                    AvontusUser AvUser = AvontusUser.GetUser(StrUsrQtfy);
+                    //BusinessPartnerComboList BpatList = BusinessPartnerComboList.GetCustomerComboList(Guid.Empty, ActiveStatus.Active, ActiveStatus.Active, false, false);
+
+                    ProductCollection ProdList = ProductCollection.GetProductCollection(ProductType.All);
+
+                    Int32 IntProdlist = 0;
+                    IntProdlist = ProdList.Count;
+
+
+
+
+
+                    /*
+                     *Dim prods As ProductCollection = ProductCollection.GetProductCollection(ProductType.Product)
+
+        For Each prod As Product In prods
+            Console.WriteLine(prod.PartNumber + " " + prod.Description)
+        Next
+                     *
+                     *
+                     * */
+
+                }
+            }
+
+
+            catch (Exception ex)
             {
-                Salida = ex.InnerException.ToString();
+                StrSalida = ex.InnerException.ToString();
 
             }
             return StrSalida; 
@@ -65,6 +107,7 @@ namespace Quantify.API
                 {
                     AvontusUser AvUser = AvontusUser.GetUser(StrUsrQtfy);
                     BusinessPartnerComboList BpatList = BusinessPartnerComboList.GetCustomerComboList(Guid.Empty, ActiveStatus.Active, ActiveStatus.Active, false, false);
+
                    // StockingLocation Local = StockingLocation.GetStockingLocation(Guid.Parse(StrStockingLocation), true, true);
                    // ShipmentList Slist = ShipmentList.GetShipmentList(Local.StockingLocationID);
                    //ShipmentList Slist2 = ShipmentList.GetShipmentList(Guid.Parse(Local.StockingLocationID.ToString()));

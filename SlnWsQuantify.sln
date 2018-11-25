@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WsQuantify", "WsQuantify\WsQuantify.csproj", "{B6066FFD-2674-4172-BF97-09283ECA00EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quantify.API", "..\..\Report Importer\Quantify.API.csproj", "{E367666B-B910-45FB-8620-0D6882CAC9C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quantify.API", "ApiMethod\Quantify.API.csproj", "{E367666B-B910-45FB-8620-0D6882CAC9C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

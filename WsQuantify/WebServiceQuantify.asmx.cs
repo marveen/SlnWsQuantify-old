@@ -265,5 +265,16 @@ namespace WsQuantify
         }
 
 
+        //GetProductoReport
+        [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public string GetProductoReport(String StrCodPais, String StrUser, String Strpass)
+        {
+            Apimethod Api_ = new Apimethod();
+            string Strsalida = "";
+            Strsalida = Api_.GetProductoReport(StrCodPais, StrUser, Strpass);
+            return Strsalida;
+        }
+
     }
 }
