@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<connectionStrings>
+  <add name="ASIRentalMgrDB" connectionString="Data Source=quantify-srv02\SQLUNtest2;Initial Catalog=ASIRentalManager;User ID=ASIUser;Password=pwdForAvontus;MultipleActiveResultSets=True;" />
+</connectionStrings>

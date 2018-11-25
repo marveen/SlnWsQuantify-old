@@ -1,0 +1,12 @@
+C:\Report Importer\bin\Release\Quantify.API.pdb
+C:\Report Importer\bin\Release\Avontus.Core.dll
+C:\Report Importer\bin\Release\Avontus.Rental.Library.dll
+C:\Report Importer\bin\Release\Avontus.Rental.Utility.dll
+C:\Report Importer\bin\Release\Newtonsoft.Json.dll
+C:\Report Importer\bin\Release\Newtonsoft.Json.pdb
+C:\Report Importer\bin\Release\Newtonsoft.Json.xml
+C:\Report Importer\obj\Release\Quantify.API.pdb
+C:\Report Importer\bin\Release\Quantify.API.dll.config
+C:\Report Importer\bin\Release\Quantify.API.dll
+C:\Report Importer\obj\Release\Quantify.API.dll
+C:\Report Importer\obj\Release\Quantify.API.csprojResolveAssemblyReference.cache
