@@ -20,6 +20,24 @@ namespace Quantify.API
 {
     public class Apimethod
     {    
+        
+        public string GetProductoReport(String StrCodPais, String StrUser, String Strpass)
+        {
+            String StrSalida ="";
+
+            try{}
+
+
+             catch (Exception ex)
+            {
+                Salida = ex.InnerException.ToString();
+
+            }
+            return StrSalida; 
+        }
+        
+
+    
         public string GetProductByShippingID(String StrCodPais, String StrUser, String Strpass, String ShipmentID)
         {
 
