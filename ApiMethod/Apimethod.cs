@@ -49,6 +49,7 @@ namespace Quantify.API
 
                     Int32 IntProdlist = 0;
                     IntProdlist = ProdList.Count;
+                    // Estamos cuadrados con los 799 Productos 
 
                     String StrProductname;
                     foreach (Product PivotProduct in ProdList)
@@ -61,7 +62,8 @@ namespace Quantify.API
 
 
 
-                    StockedProductList StockedPrds = StockedProductList.GetStockedProductList(Guid.Empty, Guid.Empty, ProductType.Product);
+                    StockedProductList StockedPrds = StockedProductList.GetStockedProductList(Guid.Empty, Guid.Empty, ProductType.All);
+                    StockedProductList StockedPrds2 = StockedProductList.GetStockedProductList(Guid.Empty, ProductType.ProductOrConsumable);
 
 
 
@@ -86,7 +88,37 @@ namespace Quantify.API
 
                     System.Windows.Forms.TreeNode oMainNode = tvOrganization.Nodes[0];
 
-                    IntProdlist = StockedProductList.Count;
+                    IntProdlist = StockedPrds.Count;
+
+
+                    StockedProductCollection ProdCol = StockedProductCollection.GetStockedProductCollection(AvUser.PrimaryTradingPartnerID, ProductType.All);
+                    double? SumOnRent = 0; 
+
+                    foreach (StockedProduct item in ProdCol)
+                    {
+                        if (item.Description == "PASADOR DE SEGURIDAD")
+                        {
+                                        IntProdlist = ProdCol.Count;
+
+                            double? QtyRented = (item.QtyOnRentOriginal != null) ? item.QtyOnRentOriginal : 0;
+                     
+                            SumOnRent = SumOnRent + QtyRented;
+
+                            // esto esta cuadrando con lo de avpontus , el problema es que hay que recorerlo de mejor manera 
+                            //pensar en tener un Array de todos los productos es la mejor forma pero hay que estar cuadrado 
+                            //con los distitnios produtos que tiene Avotuns. 
+
+
+
+                        }
+
+                    }
+
+                    SumOnRent = SumOnRent + 0; 
+
+
+
+
 
 
 
