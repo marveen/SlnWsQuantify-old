@@ -8,8 +8,6 @@ using System.Web.Script.Serialization;
 using System.Data;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
-using System.Web.Script.Serialization;
-
 using Avontus.Core;
 using Avontus.Core.Data;
 using Avontus.Rental.Library;
@@ -63,14 +61,14 @@ namespace Quantify.API
 
 
 
-                    StockedProductList StockedProductList = StockedProductList.GetStockedProductList(Guid.Empty, Guid.Empty, ProductType.Product);
+                    StockedProductList StockedPrds = StockedProductList.GetStockedProductList(Guid.Empty, Guid.Empty, ProductType.Product);
 
 
 
                     //StockedProductList StockedProductList2 = StockedProductList.get
 
-                    IntProdlist = StockedProductList.Count;
-                    foreach (StockedProductListItem PivotProduct in StockedProductList)
+                    IntProdlist = StockedPrds.Count;
+                    foreach (StockedProductListItem PivotProduct in StockedPrds)
                     {
                         StrProductname = PivotProduct.PartNumber;
 
