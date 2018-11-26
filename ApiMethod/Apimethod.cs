@@ -56,8 +56,6 @@ namespace Quantify.API
                     {
                         StrProductname = PivotProduct.PartNumber; 
 
-
-
                     }
 
 
@@ -73,9 +71,7 @@ namespace Quantify.API
                     foreach (StockedProductListItem PivotProduct in StockedPrds)
                     {
                         StrProductname = PivotProduct.PartNumber;
-
-
-
+                        
                     }
 
 
