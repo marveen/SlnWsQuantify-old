@@ -51,6 +51,10 @@ namespace Quantify.API
                     IntProdlist = ProdList.Count;
                     // Estamos cuadrados con los 799 Productos 
 
+                    // Alicar aqui la lista de Locales , revisar 2da planilla por que aui va el if 
+                    //quizas tro mas 
+
+
                     String StrProductname;
                     foreach (Product PivotProduct in ProdList)
                     {
@@ -58,7 +62,7 @@ namespace Quantify.API
 
                     }
 
-
+                    //Sacando Cachos  
 
                     StockedProductList StockedPrds = StockedProductList.GetStockedProductList(Guid.Empty, Guid.Empty, ProductType.All);
                     StockedProductList StockedPrds2 = StockedProductList.GetStockedProductList(Guid.Empty, ProductType.ProductOrConsumable);
@@ -88,11 +92,15 @@ namespace Quantify.API
 
 
                     StockedProductCollection ProdCol = StockedProductCollection.GetStockedProductCollection(AvUser.PrimaryTradingPartnerID, ProductType.All);
+
+
+
+
                     double? SumOnRent = 0; 
 
                     foreach (StockedProduct item in ProdCol)
                     {
-                        if (item.Description == "PASADOR DE SEGURIDAD")
+                        if (item.Description == "PALET")
                         {
                                         IntProdlist = ProdCol.Count;
 
@@ -103,8 +111,6 @@ namespace Quantify.API
                             // esto esta cuadrando con lo de avpontus , el problema es que hay que recorerlo de mejor manera 
                             //pensar en tener un Array de todos los productos es la mejor forma pero hay que estar cuadrado 
                             //con los distitnios produtos que tiene Avotuns. 
-
-
 
                         }
 
