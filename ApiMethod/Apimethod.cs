@@ -43,7 +43,38 @@ namespace Quantify.API
                 if (success)
                 {
                     AvontusUser AvUser = AvontusUser.GetUser(StrUsrQtfy);
+
                     BusinessPartnerComboList BpatList = BusinessPartnerComboList.GetCustomerComboList(Guid.Empty, ActiveStatus.Active, ActiveStatus.Active, false, false);
+
+                    DataSet orgData = StockingLocationOrganization.GetOrganizationData(ActiveStatus.Active);
+
+                    StockingLocationOrganization slo = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
+
+                    DataTable locations = orgData.Tables[0];
+
+                    List<Guid> LocationList = new List<Guid>();
+
+
+                    string StrPivotGuid;
+                    foreach (DataRow DR in locations.Rows)
+                    {
+                        //Obtener Guid de Locacion 
+
+                        Guid Gid = new Guid();
+                        //LocationList.Add(Gid);
+
+                        StrPivotGuid = DR.ItemArray[2].ToString();
+
+                        if (StrPivotGuid.Length > 10)
+                        {
+                            Gid = new Guid(StrPivotGuid);
+                            LocationList.Add(Gid);
+
+                        }
+                    }
+
+
+
 
                     ProductCollection ProdList = ProductCollection.GetProductCollection(ProductType.Product);
 
@@ -55,43 +86,62 @@ namespace Quantify.API
                     //quizas tro mas 
 
 
-                    String StrProductname;
-                    foreach (Product PivotProduct in ProdList)
-                    {
-                        StrProductname = PivotProduct.PartNumber; 
+                    //String StrProductname;
+                    //foreach (Product PivotProduct in ProdList)
+                    //{
+                    //    StrProductname = PivotProduct.PartNumber; 
 
-                    }
+                    //}gui
 
                     //Sacando Cachos  
 
-                    StockedProductList StockedPrds = StockedProductList.GetStockedProductList(Guid.Empty, Guid.Empty, ProductType.All);
-                    StockedProductList StockedPrds2 = StockedProductList.GetStockedProductList(Guid.Empty, ProductType.ProductOrConsumable);
+                    StockedProductList StockedPrds = StockedProductList.GetStockedProductList(LocationList, Guid.Empty, ProductType.All);
+                    int intCountStocked;
+                    intCountStocked = StockedPrds.Count;
+
+
+                    
+                    //StockedProductList StockedPrds2 = StockedProductList.GetStockedProductList(Guid.Empty, ProductType.ProductOrConsumable);
 
 
 
                     //StockedProductList StockedProductList2 = StockedProductList.get
 
-                    IntProdlist = StockedPrds.Count;
-                    foreach (StockedProductListItem PivotProduct in StockedPrds)
-                    {
-                        StrProductname = PivotProduct.PartNumber;
+                    //IntProdlist = StockedPrds.Count;
+                    //foreach (StockedProductListItem PivotProduct in StockedPrds)
+                    //{
+                    //    StrProductname = PivotProduct.PartNumber;
                         
-                    }
+                    //}
 
 
 
                     // System.Web.UI.WebControls.TreeView tvOrganization = new System.Web.UI.WebControls.TreeView();
-                    System.Windows.Forms.TreeView tvOrganization = new System.Windows.Forms.TreeView();
+                    //System.Windows.Forms.TreeView tvOrganization = new System.Windows.Forms.TreeView();
 
-                    StockingLocationOrganization orgTree = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
-                    orgTree.BuildTreeView(tvOrganization, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.PrimaryTradingPartnerID);
+                    //StockingLocationOrganization orgTree = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
+                    //orgTree.BuildTreeView(tvOrganization, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.PrimaryTradingPartnerID);
 
-                    System.Windows.Forms.TreeNode oMainNode = tvOrganization.Nodes[0];
+                    //System.Windows.Forms.TreeNode oMainNode = tvOrganization.Nodes[0];
 
-                    IntProdlist = StockedPrds.Count;
+                    //IntProdlist = StockedPrds.Count;
 
 
                     StockedProductCollection ProdCol = StockedProductCollection.GetStockedProductCollection(AvUser.PrimaryTradingPartnerID, ProductType.All);
+                    IntProdlist = ProdCol.Count;
+
+
+                    //GET PRODUCTO LIST 
+
+                    //StockedProduct ProdColByLocation = StockedProductCollection.GetStockedProductCollection()
+
+
+                    //StockedProductList StockedPrds = StockedProductList.GetStockedProductList(Guid.Empty, Guid.Empty, ProductType.Product);
+
+
+                    //StockingLocationList JobSiteList = StockingLocationList.GetJobsites(false, JobTreeNodeDisplayType.Name, Guid.Parse(bpat.BusinessPartnerID.ToString()), Guid.Empty);
+
+                    //StockedProductList StockedPrds2 = StockedProductList.GetStockedProductList();
 
 
 
