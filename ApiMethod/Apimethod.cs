@@ -146,27 +146,116 @@ namespace Quantify.API
 
 
 
-                    double? SumOnRent = 0; 
 
-                    foreach (StockedProduct item in ProdCol)
+                    // ARMANDO LA SALIDAR PARA MANITO PASA LA DATA MANITO 
+
+                    //* Exportacion Objeto Dataset Limpio*//
+                    DataSet dataSetProducts = new DataSet("DS_StocketItems");
+                    dataSetProducts.Namespace = "Quantify";
+                    DataTable tableProducts = new DataTable();
+                    tableProducts.TableName = "StockedItems";
+
+                    DataColumn idColumn = new DataColumn("id", typeof(string));
+                    DataColumn colCodigo = new DataColumn("Codigo", typeof(string));
+                    DataColumn colDescription = new DataColumn("Description", typeof(string));
+                    DataColumn colCatalog = new DataColumn("Catalog", typeof(string));
+                    DataColumn colWeightEach = new DataColumn("Weight Each", typeof(string));
+                    DataColumn colCostEach = new DataColumn("Cost Each", typeof(string));
+                    DataColumn colQuantityEnArriendo = new DataColumn("Quantity En Arriendo", typeof(string));
+                    DataColumn colQuantityDisponible = new DataColumn("Quantity Disponible", typeof(string));
+                    DataColumn colQuantityReserved = new DataColumn("Quantity Reserved", typeof(string));
+                    DataColumn colQuantityInTransit = new DataColumn("Quantity In Transit", typeof(string));
+                    DataColumn colQuantityNew = new DataColumn("Quantity New", typeof(string));
+                  
+
+
+                    idColumn.AutoIncrement = true;
+
+                    tableProducts.Columns.Add(idColumn);
+                    tableProducts.Columns.Add(colCodigo);
+                    tableProducts.Columns.Add(colDescription);
+                    tableProducts.Columns.Add(colCatalog);
+                    tableProducts.Columns.Add(colWeightEach);
+                    tableProducts.Columns.Add(colCostEach);
+                    tableProducts.Columns.Add(colQuantityEnArriendo);
+                    tableProducts.Columns.Add(colQuantityDisponible);
+                    tableProducts.Columns.Add(colQuantityReserved);
+                    tableProducts.Columns.Add(colQuantityInTransit);
+                    tableProducts.Columns.Add(colQuantityNew);
+
+                    dataSetProducts.Tables.Add(tableProducts);
+
+
+
+                    foreach (StockedProduct prod in ProdCol)
                     {
-                        if (item.Description == "PALET")
+
+                        Product Prodname = Product.GetProduct(new Guid(prod.BaseProductID.ToString()));
+                        
+                        String StrDescription = (Prodname.Description != null) ? Prodname.Description.ToString() : "NoName";
+                        String StrPartNumbert = (prod.PartNumber != null) ? prod.PartNumber.ToString() : "NoPartNumber";
+
+
+                        String StrQuantityOnRent = (prod.QuantityOnRent != null) ? prod.QuantityOnRent.ToString() : "0";
+                        String StrQuantityInTransit = (prod.QuantityInTransit != null) ? prod.QuantityInTransit.ToString() : "0";
+                        String StrQuantityReserved = (prod.QuantityReserved != null) ? prod.QuantityReserved.ToString() : "0";
+                        String StrWeight = (prod.Weight != null) ? prod.Weight.ToString() : "0";
+
+                        if (prod.QuantityForRent == null)
                         {
-                                        IntProdlist = ProdCol.Count;
-
-                            double? QtyRented = (item.QtyOnRentOriginal != null) ? item.QtyOnRentOriginal : 0;
-                     
-                            SumOnRent = SumOnRent + QtyRented;
-
-                            // esto esta cuadrando con lo de avpontus , el problema es que hay que recorerlo de mejor manera 
-                            //pensar en tener un Array de todos los productos es la mejor forma pero hay que estar cuadrado 
-                            //con los distitnios produtos que tiene Avotuns. 
-
+                            continue;
                         }
+
+
+                        DataRow TempRow = tableProducts.NewRow();
+                        TempRow["Codigo"] = StrPartNumbert;
+                        TempRow["Description"] = StrDescription;
+                        TempRow["Catalog"] = "";
+                        TempRow["Weight Each"] = StrWeight;
+                        TempRow["Cost Each"] = "";
+                        TempRow["Quantity En Arriendo"] = StrQuantityOnRent;
+                        TempRow["Quantity Disponible"] = "";
+                        TempRow["Quantity Reserved"] = StrQuantityReserved;
+                        TempRow["Quantity In Transit"] = StrQuantityInTransit;
+                        TempRow["Quantity New"] = "";
+
+
+                   
+
+                        //Parseo y Salida JSON
+
+                        tableProducts.Rows.Add(TempRow);
+
 
                     }
 
-                    SumOnRent = SumOnRent + 0; 
+                    dataSetProducts.AcceptChanges();
+                    StrSalida = JsonConvert.SerializeObject(dataSetProducts, Formatting.Indented);
+
+
+                    // FORMA LARGA
+
+                    //double? SumOnRent = 0; 
+
+                    //foreach (StockedProduct item in ProdCol)
+                    //{
+                    //    if (item.Description == "PALET")
+                    //    {
+                    //                    IntProdlist = ProdCol.Count;
+
+                    //        double? QtyRented = (item.QtyOnRentOriginal != null) ? item.QtyOnRentOriginal : 0;
+
+                    //        SumOnRent = SumOnRent + QtyRented;
+
+                    //        // esto esta cuadrando con lo de avpontus , el problema es que hay que recorerlo de mejor manera 
+                    //        //pensar en tener un Array de todos los productos es la mejor forma pero hay que estar cuadrado 
+                    //        //con los distitnios produtos que tiene Avotuns. 
+
+                    //    }
+
+                    //}
+
+                    //SumOnRent = SumOnRent + 0; 
 
 
 
