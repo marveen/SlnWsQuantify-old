@@ -19,7 +19,7 @@ namespace Quantify.API
     public class Apimethod
     {    
         
-        public string GetProductoReport(String StrCodPais, String StrUser, String Strpass)
+        public string GetProductoReport_SandBox(String StrCodPais, String StrUser, String Strpass)
         {
             String StrSalida ="";
 
@@ -192,17 +192,22 @@ namespace Quantify.API
 
                         Product Prodname = Product.GetProduct(new Guid(prod.BaseProductID.ToString()));
                         
-                        String StrDescription = (Prodname.Description != null) ? Prodname.Description.ToString() : "NoName";
+                       
                         String StrPartNumbert = (prod.PartNumber != null) ? prod.PartNumber.ToString() : "NoPartNumber";
-
-
-                        String StrQuantityOnRent = (prod.QuantityOnRent != null) ? prod.QuantityOnRent.ToString() : "0";
-                        String StrQuantityInTransit = (prod.QuantityInTransit != null) ? prod.QuantityInTransit.ToString() : "0";
-                        String StrQuantityReserved = (prod.QuantityReserved != null) ? prod.QuantityReserved.ToString() : "0";
+                        String StrDescription = (Prodname.Description != null) ? Prodname.Description.ToString() : "NoName";
+                        String StrProductCategoryName = (Prodname.ProductCategoryNameLazyLoaded != null) ? Prodname.ProductCategoryNameLazyLoaded.ToString() : "No Category";
                         String StrWeight = (prod.Weight != null) ? prod.Weight.ToString() : "0";
+                        String StrDelaultCost = (prod.DefaultCost != null) ? prod.DefaultCost.ToString() : "0";
+                        String StrQuantityOnRent = (prod.QuantityOnRent != null) ? prod.QuantityOnRent.ToString() : "0";
+                        String StrQuantityForRent = (prod.QuantityForRent != null) ? prod.QuantityForRent.ToString() : "0";             
+                        String StrQuantityReserved = (prod.QuantityReserved != null) ? prod.QuantityReserved.ToString() : "0";
+                        String StrQuantityInTransit = (prod.QuantityInTransit != null) ? prod.QuantityInTransit.ToString() : "0";
+                        String StrQuantityNew  = (prod.QuantityNew != null) ? prod.QuantityNew.ToString() : "0";
+
 
                         if (prod.QuantityForRent == null)
                         {
+                            //Validacion para saltar lo que no tienen Reserva 
                             continue;
                         }
 
@@ -210,19 +215,15 @@ namespace Quantify.API
                         DataRow TempRow = tableProducts.NewRow();
                         TempRow["Codigo"] = StrPartNumbert;
                         TempRow["Description"] = StrDescription;
-                        TempRow["Catalog"] = "";
-                        TempRow["Weight Each"] = StrWeight;
-                        TempRow["Cost Each"] = "";
+                        TempRow["Catalog"] = StrProductCategoryName; 
+                        TempRow["Weight Each"] = StrWeight; 
+                        TempRow["Cost Each"] = StrDelaultCost;  
                         TempRow["Quantity En Arriendo"] = StrQuantityOnRent;
-                        TempRow["Quantity Disponible"] = "";
+                        TempRow["Quantity Disponible"] = StrQuantityForRent; 
                         TempRow["Quantity Reserved"] = StrQuantityReserved;
                         TempRow["Quantity In Transit"] = StrQuantityInTransit;
-                        TempRow["Quantity New"] = "";
+                        TempRow["Quantity New"] = StrQuantityNew; 
 
-
-                   
-
-                        //Parseo y Salida JSON
 
                         tableProducts.Rows.Add(TempRow);
 
@@ -275,9 +276,165 @@ namespace Quantify.API
             }
             return StrSalida; 
         }
-        
 
-    
+        public string GetProductoReport(String StrCodPais, String StrUser, String Strpass)
+        {
+            String StrSalida = "";
+
+            try
+            {
+
+                AvontusPrincipal.Logout();
+                string Conex = Avontus.Rental.Library.Settings.CommonConfigurationSettings.ConnectionString;
+                string strdbname;
+                strdbname = "quantify-srv02\\SQLUN" + StrCodPais;
+                System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+                builder.ConnectionString = Conex;
+                builder.DataSource = strdbname;
+
+                //Base de Datos Rotativa                                
+                Avontus.Rental.Library.Settings.CommonConfigurationSettings.ConnectionString = builder.ConnectionString;
+                String StrUsrQtfy = StrUser; // ConfigurationManager.AppSettings["UsrQtfy"];
+                String StrPassQtfy = Strpass; // ConfigurationManager.AppSettings["PassQtfy"];
+                bool success = AvontusPrincipal.Login(StrUsrQtfy, StrPassQtfy);
+
+
+                if (success)
+                {
+                    AvontusUser AvUser = AvontusUser.GetUser(StrUsrQtfy);
+
+
+                    //Obtener toda la organizacion 
+                    DataSet orgData = StockingLocationOrganization.GetOrganizationData(ActiveStatus.Active);
+                    DataTable locations = orgData.Tables[0];
+
+                    List<Guid> LocationList = new List<Guid>();
+
+
+                    string StrPivotGuid;
+                    foreach (DataRow DR in locations.Rows)
+                    {
+                        //Obtener Guid de Locacion 
+
+                        Guid Gid = new Guid();
+                        //LocationList.Add(Gid);
+
+                        StrPivotGuid = DR.ItemArray[2].ToString();
+
+                        if (StrPivotGuid.Length > 10)
+                        {
+                            Gid = new Guid(StrPivotGuid);
+                            LocationList.Add(Gid);
+
+                        }
+                    }
+
+
+
+                    Int32 IntProdlist = 0;
+                    StockedProductList ProdList = StockedProductList.GetStockedProductList(LocationList, Guid.Empty, ProductType.All);
+                    int intCountStocked;
+                    intCountStocked = ProdList.Count;
+
+                    // ARMANDO LA SALIDAR PARA MANITO PASA LA DATA MANITO 
+
+                    //* Exportacion Objeto Dataset Limpio*//
+                    DataSet dataSetProducts = new DataSet("DS_StocketItems");
+                    dataSetProducts.Namespace = "Quantify";
+                    DataTable tableProducts = new DataTable();
+                    tableProducts.TableName = "StockedItems";
+
+                    DataColumn idColumn = new DataColumn("id", typeof(string));
+                    DataColumn colCodigo = new DataColumn("Codigo", typeof(string));
+                    DataColumn colDescription = new DataColumn("Description", typeof(string));
+                    DataColumn colCatalog = new DataColumn("Catalog", typeof(string));
+                    DataColumn colWeightEach = new DataColumn("Weight Each", typeof(string));
+                    DataColumn colCostEach = new DataColumn("Cost Each", typeof(string));
+                    DataColumn colQuantityEnArriendo = new DataColumn("Quantity En Arriendo", typeof(string));
+                    DataColumn colQuantityDisponible = new DataColumn("Quantity Disponible", typeof(string));
+                    DataColumn colQuantityReserved = new DataColumn("Quantity Reserved", typeof(string));
+                    DataColumn colQuantityInTransit = new DataColumn("Quantity In Transit", typeof(string));
+                    DataColumn colQuantityNew = new DataColumn("Quantity New", typeof(string));
+
+
+
+                    idColumn.AutoIncrement = true;
+
+                    tableProducts.Columns.Add(idColumn);
+                    tableProducts.Columns.Add(colCodigo);
+                    tableProducts.Columns.Add(colDescription);
+                    tableProducts.Columns.Add(colCatalog);
+                    tableProducts.Columns.Add(colWeightEach);
+                    tableProducts.Columns.Add(colCostEach);
+                    tableProducts.Columns.Add(colQuantityEnArriendo);
+                    tableProducts.Columns.Add(colQuantityDisponible);
+                    tableProducts.Columns.Add(colQuantityReserved);
+                    tableProducts.Columns.Add(colQuantityInTransit);
+                    tableProducts.Columns.Add(colQuantityNew);
+
+                    dataSetProducts.Tables.Add(tableProducts);
+
+
+
+                    foreach (StockedProductListItem prod in ProdList)
+                    {
+
+                        Product Prodname = Product.GetProduct(new Guid(prod.BaseProductID.ToString()));
+
+
+                        String StrPartNumbert = (prod.PartNumber != null) ? prod.PartNumber.ToString() : "NoPartNumber";
+                        String StrDescription = (Prodname.Description != null) ? Prodname.Description.ToString() : "NoName";
+                        String StrProductCategoryName = (Prodname.ProductCategoryNameLazyLoaded != null) ? Prodname.ProductCategoryNameLazyLoaded.ToString() : "No Category";
+                        String StrWeight = (prod.Weight != null) ? prod.Weight.ToString() : "0";
+                        String StrDelaultCost = (prod.DefaultCost != null) ? prod.DefaultCost.ToString() : "0";
+                        String StrQuantityOnRent = (prod.QuantityOnRent != null) ? prod.QuantityOnRent.ToString() : "0";
+                        String StrQuantityForRent = (prod.QuantityForRent != null) ? prod.QuantityForRent.ToString() : "0";
+                        String StrQuantityReserved = (prod.QuantityReserved != null) ? prod.QuantityReserved.ToString() : "0";
+                        String StrQuantityInTransit = (prod.QuantityInTransit != null) ? prod.QuantityInTransit.ToString() : "0";
+                        String StrQuantityNew = (prod.QuantityNew != null) ? prod.QuantityNew.ToString() : "0";
+
+
+                        if (prod.QuantityForRent == null)
+                        {
+                            //Validacion para saltar lo que no tienen Reserva 
+                            //continue;
+                        }
+
+
+                        DataRow TempRow = tableProducts.NewRow();
+                        TempRow["Codigo"] = StrPartNumbert;
+                        TempRow["Description"] = StrDescription;
+                        TempRow["Catalog"] = StrProductCategoryName;
+                        TempRow["Weight Each"] = StrWeight;
+                        TempRow["Cost Each"] = StrDelaultCost;
+                        TempRow["Quantity En Arriendo"] = StrQuantityOnRent;
+                        TempRow["Quantity Disponible"] = StrQuantityForRent;
+                        TempRow["Quantity Reserved"] = StrQuantityReserved;
+                        TempRow["Quantity In Transit"] = StrQuantityInTransit;
+                        TempRow["Quantity New"] = StrQuantityNew;
+
+
+                        tableProducts.Rows.Add(TempRow);
+
+
+                    }
+
+                    dataSetProducts.AcceptChanges();
+                    StrSalida = JsonConvert.SerializeObject(dataSetProducts, Formatting.Indented);
+
+                }
+            }
+
+
+            catch (Exception ex)
+            {
+                StrSalida = ex.InnerException.ToString();
+
+            }
+            return StrSalida;
+        }
+
+
         public string GetProductByShippingID(String StrCodPais, String StrUser, String Strpass, String ShipmentID)
         {
 
