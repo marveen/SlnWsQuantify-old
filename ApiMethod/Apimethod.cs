@@ -332,7 +332,7 @@ namespace Quantify.API
 
 
                     Int32 IntProdlist = 0;
-                    StockedProductList ProdList = StockedProductList.GetStockedProductList(LocationList, Guid.Empty, ProductType.All);
+                    StockedProductList ProdList = StockedProductList.GetStockedProductList(LocationList, Guid.Empty, ProductType.Product);
                     int intCountStocked;
                     intCountStocked = ProdList.Count;
 
