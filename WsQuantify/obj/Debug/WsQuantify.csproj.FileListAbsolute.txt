@@ -30,11 +30,15 @@ C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Quantify.API.d
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\DocumentFormat.OpenXml.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\FastMember.Signed.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Quantify.API.pdb
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Quantify.API.dll.config
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Quantify.API.exe.config
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\ClosedXML.pdb
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\ClosedXML.xml
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Newtonsoft.Json.pdb
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Newtonsoft.Json.xml
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\DocumentFormat.OpenXml.xml
-C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Debug\WsQuantify.csprojResolveAssemblyReference.cache
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Debug\WsQuantify.csprojAssemblyReference.cache
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Debug\WsQuantify.csproj.CoreCompileInputs.cache
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Debug\WsQuantify.csproj.CopyComplete
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Debug\WsQuantify.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Debug\WsQuantify.pdb

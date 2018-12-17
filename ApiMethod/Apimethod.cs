@@ -19,7 +19,7 @@ namespace Quantify.API
     public class Apimethod
     {    
         
-        public string GetProductoReport_SandBox(String StrCodPais, String StrUser, String Strpass)
+        public string GetReportCustomerSL(String StrCodPais, String StrUser, String Strpass)
         {
             String StrSalida ="";
 
@@ -52,6 +52,11 @@ namespace Quantify.API
 
                     DataTable locations = orgData.Tables[0];
 
+                    locations.DefaultView.Sort = "CustomerName DESC";
+
+                    DataTable dw = locations.DefaultView.ToTable();
+                  
+
                     List<Guid> LocationList = new List<Guid>();
 
 
@@ -80,20 +85,17 @@ namespace Quantify.API
 
                     Int32 IntProdlist = 0;
                     IntProdlist = ProdList.Count;
-                    // Estamos cuadrados con los 799 Productos 
+                    //en este punto ya se tiene todos los los locales
+                    //hay que armar la salida, para validar la mejor forma es tomar
+                    //por poarden alfabetido de customername asi agrupamos comoen quetyfy
+                    //depsues buscamos los stocked productos X PAdre y sumamaos como 
 
-                    // Alicar aqui la lista de Locales , revisar 2da planilla por que aui va el if 
-                    //quizas tro mas 
 
 
-                    //String StrProductname;
-                    //foreach (Product PivotProduct in ProdList)
-                    //{
-                    //    StrProductname = PivotProduct.PartNumber; 
 
-                    //}gui
 
-                    //Sacando Cachos  
+
+
 
                     StockedProductList StockedPrds = StockedProductList.GetStockedProductList(LocationList, Guid.Empty, ProductType.All);
                     int intCountStocked;

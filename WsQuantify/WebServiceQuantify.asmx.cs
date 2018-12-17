@@ -9,7 +9,6 @@ using System.Web.Script.Serialization;
 using System.Data;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
-
 using Avontus.Core;
 using Avontus.Core.Data;
 using Avontus.Rental.Library;
@@ -275,6 +274,21 @@ namespace WsQuantify
             Strsalida = Api_.GetProductoReport(StrCodPais, StrUser, Strpass);
             return Strsalida;
         }
+
+
+        //GetReportCustomerSL
+
+        //GetProductoReport
+        [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public string GetReportCustomerSL(String StrCodPais, String StrUser, String Strpass)
+        {
+            Apimethod Api_ = new Apimethod();
+            string Strsalida = "";
+            Strsalida = Api_.GetReportCustomerSL(StrCodPais, StrUser, Strpass);
+            return Strsalida;
+        }
+
 
     }
 }
