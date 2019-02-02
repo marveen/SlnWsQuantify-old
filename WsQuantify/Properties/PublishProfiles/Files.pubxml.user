@@ -6,71 +6,89 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\WsQuantify\Compiled</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\inetpub\WsQuantifyQA</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApiReferences/Avontus.Core.dll">
-      <publishTime>11/25/2018 18:45:30</publishTime>
+      <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="ApiReferences/Avontus.Rental.Library.dll">
-      <publishTime>11/25/2018 18:45:30</publishTime>
+      <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="ApiReferences/Avontus.Rental.Utility.dll">
-      <publishTime>01/09/2017 15:30:30</publishTime>
+      <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="ApiReferences/ClosedXML.dll">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="ApiReferences/Newtonsoft.Json.dll">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
+    </File>
+    <File Include="ApiReferences/Newtonsoft.Json.pdb">
+      <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="bin/Avontus.Core.dll">
-      <publishTime>11/25/2018 18:45:30</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="bin/Avontus.Rental.Library.dll">
-      <publishTime>11/25/2018 18:45:30</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="bin/Avontus.Rental.Utility.dll">
-      <publishTime>01/09/2017 15:30:30</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="bin/ClosedXML.dll">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
+    </File>
+    <File Include="bin/ClosedXML.pdb">
+      <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="bin/DocumentFormat.OpenXml.dll">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="bin/FastMember.Signed.dll">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.pdb">
+      <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="bin/Quantify.API.dll">
-      <publishTime>11/26/2018 14:56:34</publishTime>
+      <publishTime>12/19/2018 01:45:47</publishTime>
+    </File>
+    <File Include="bin/Quantify.API.dll.config">
+      <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="bin/Quantify.API.exe">
       <publishTime>03/15/2017 03:09:31</publishTime>
     </File>
+    <File Include="bin/Quantify.API.pdb">
+      <publishTime>12/19/2018 01:45:47</publishTime>
+    </File>
     <File Include="bin/WsQuantify.dll">
-      <publishTime>11/26/2018 14:56:34</publishTime>
+      <publishTime>12/19/2018 01:45:48</publishTime>
+    </File>
+    <File Include="bin/WsQuantify.pdb">
+      <publishTime>12/19/2018 01:45:48</publishTime>
     </File>
     <File Include="diagramWS.cd">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="ExcelReport.aspx">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/26/2018 14:56:35</publishTime>
+      <publishTime>12/19/2018 01:45:48</publishTime>
     </File>
     <File Include="WebServiceQuantify.asmx">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="WsInvokeSample.html">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="WsInvokeSample_prod.html">
-      <publishTime>11/25/2018 18:45:31</publishTime>
+      <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
   </ItemGroup>
 </Project>

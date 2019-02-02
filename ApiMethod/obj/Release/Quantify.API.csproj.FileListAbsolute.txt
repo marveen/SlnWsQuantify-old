@@ -13,8 +13,10 @@ C:\Report Importer\obj\Release\Quantify.API.csprojResolveAssemblyReference.cache
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Release\Quantify.API.dll.config
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Release\Quantify.API.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Release\Quantify.API.pdb
-C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Release\Newtonsoft.Json.pdb
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Release\Newtonsoft.Json.xml
-C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Release\Quantify.API.csprojResolveAssemblyReference.cache
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Release\Quantify.API.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Release\Quantify.API.pdb
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Release\Newtonsoft.Json.dll
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Release\Quantify.API.csprojAssemblyReference.cache
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Release\Quantify.API.csproj.CoreCompileInputs.cache
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Release\Quantify.API.csproj.CopyComplete
