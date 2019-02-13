@@ -7,26 +7,58 @@ using System.Web.UI.WebControls;
 using Newtonsoft.Json;
 using ClosedXML.Excel;
 using System.IO;
+using System.Data;
+
 
 
 namespace WsQuantify
 {
     public partial class Reports : System.Web.UI.Page
     {
+
+        DataSet DsetReport = new DataSet();
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
             WsQuantify.WebServiceQuantify Wsneed = new WebServiceQuantify();
 
-            String StrJsonReport = "";
+            String StrJsonReport = ""; 
 
-            //StrJsonReport   = Wsneed.GetReportCustomerSL("cl", "consultaweb", "Unispan.001");
+            StrJsonReport   = Wsneed.GetReportCustomerSL("cl", "consultaweb", "Unispan.001");
+
+           
+            DsetReport = GetDataSet(StrJsonReport);
 
             //Response.Write(StrJsonReport);
 
 
         }
 
+
+
+        private DataSet GetDataSet(String StrJsonInput)
+        {
+
+            var ds = new DataSet();
+            try
+            { 
+         
+                ds = JsonConvert.DeserializeObject<DataSet>(StrJsonInput);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+
+            return ds;
+        }
+
+   
+        
         protected void BtnExcel_Click(object sender, EventArgs e)
         {
             String StrFilename = "Filename";
@@ -35,10 +67,16 @@ namespace WsQuantify
 
             using (var workbook = new XLWorkbook())
             {
-                var worksheet = workbook.Worksheets.Add("Sample Sheet");
-                worksheet.Cell("A1").Value = "Hello World!";
-                worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
+                //var worksheet = workbook.Worksheets.Add("Sample Sheet");
+                //worksheet.Cell("A1").Value = "Hello World!";
+                //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
+                //
+
+                 workbook.Worksheets.Add(DsetReport);
                 //workbook.SaveAs(StrFilename);
+
+
+
 
 
                 // Prepare the response
