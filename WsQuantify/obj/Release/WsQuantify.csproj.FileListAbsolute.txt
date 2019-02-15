@@ -28,7 +28,6 @@ C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\ClosedXML.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Newtonsoft.Json.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Quantify.API.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\DocumentFormat.OpenXml.dll
-C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\FastMember.Signed.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Quantify.API.pdb
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\ClosedXML.pdb
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\ClosedXML.xml
@@ -41,3 +40,8 @@ C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\Quantify.API.d
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Release\WsQuantify.csprojAssemblyReference.cache
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Release\WsQuantify.csproj.CoreCompileInputs.cache
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\obj\Release\WsQuantify.csproj.CopyComplete
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\ExcelNumberFormat.dll
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\FastMember.dll
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\System.IO.FileSystem.Primitives.dll
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\System.IO.Packaging.dll
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\WsQuantify\bin\ExcelNumberFormat.xml

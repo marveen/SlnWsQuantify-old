@@ -17,18 +17,15 @@ namespace WsQuantify
     {
 
         DataSet DsetReport = new DataSet();
+        WsQuantify.WebServiceQuantify Wsneed = new WebServiceQuantify();
+
+        String StrJsonReport = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            WsQuantify.WebServiceQuantify Wsneed = new WebServiceQuantify();
 
-            String StrJsonReport = ""; 
 
-            StrJsonReport   = Wsneed.GetReportCustomerSL("cl", "consultaweb", "Unispan.001");
-
-           
-            DsetReport = GetDataSet(StrJsonReport);
 
             //Response.Write(StrJsonReport);
 
@@ -42,8 +39,8 @@ namespace WsQuantify
 
             var ds = new DataSet();
             try
-            { 
-         
+            {
+
                 ds = JsonConvert.DeserializeObject<DataSet>(StrJsonInput);
 
             }
@@ -52,27 +49,21 @@ namespace WsQuantify
 
                 throw;
             }
-            
+
 
             return ds;
         }
 
-   
-        
-        protected void BtnExcel_Click(object sender, EventArgs e)
+
+
+
+        private void GeneraExcel(string StrFilename)
         {
-            String StrFilename = "Filename";
-            StrFilename = ddlReporte.SelectedValue;
-            StrFilename = StrFilename + ".xlsx";
+
 
             using (var workbook = new XLWorkbook())
             {
-                //var worksheet = workbook.Worksheets.Add("Sample Sheet");
-                //worksheet.Cell("A1").Value = "Hello World!";
-                //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
-                //
-
-                 workbook.Worksheets.Add(DsetReport);
+                  workbook.Worksheets.Add(DsetReport);
                 //workbook.SaveAs(StrFilename);
 
 
@@ -83,7 +74,7 @@ namespace WsQuantify
                 HttpResponse httpResponse = Response;
                 httpResponse.Clear();
                 httpResponse.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                httpResponse.AddHeader("content-disposition", "attachment;filename=\""+StrFilename+"\"");
+                httpResponse.AddHeader("content-disposition", "attachment;filename=\"" + StrFilename + "\"");
 
                 // Flush the workbook to the Response.OutputStream
                 using (MemoryStream memoryStream = new MemoryStream())
@@ -94,9 +85,46 @@ namespace WsQuantify
                 }
 
                 httpResponse.End();
+              }
             }
 
+              
 
+
+        
+   
+        protected void BtnExcel_Click(object sender, EventArgs e)
+        {
+            String StrFilename = "Filename";
+            StrFilename = ddlReporte.SelectedValue;
+            
+
+            switch (StrFilename)
+            {
+                case "StockedItemCost":
+
+                    StrFilename = "StockedItemCost_CL.xlsx";
+                    StrJsonReport = Wsneed.GetProductoReport("cl", "consultaweb", "Unispan.001");
+                    DsetReport = GetDataSet(StrJsonReport);
+                    GeneraExcel(StrFilename);
+
+                    break;
+
+                case "StockedItemCostCostumer":
+
+                    StrFilename = "StockedItemCostCostumer_CL.xlsx";
+                    StrJsonReport = Wsneed.GetReportCustomerSL("cl", "consultaweb", "Unispan.001");
+                    DsetReport = GetDataSet(StrJsonReport);
+                    GeneraExcel(StrFilename);
+                    break;
+
+            }
+
+            //llamr a GeneraExcel
+
+        
+
+        
 
 
         }

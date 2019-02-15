@@ -37,13 +37,19 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="bin/ClosedXML.dll">
-      <publishTime>12/11/2018 00:55:19</publishTime>
+      <publishTime>12/18/2018 08:56:38</publishTime>
     </File>
     <File Include="bin/ClosedXML.pdb">
-      <publishTime>12/11/2018 00:55:18</publishTime>
+      <publishTime>12/18/2018 08:56:38</publishTime>
     </File>
     <File Include="bin/DocumentFormat.OpenXml.dll">
-      <publishTime>12/11/2018 00:55:19</publishTime>
+      <publishTime>06/06/2017 22:59:22</publishTime>
+    </File>
+    <File Include="bin/ExcelNumberFormat.dll">
+      <publishTime>11/23/2017 09:21:44</publishTime>
+    </File>
+    <File Include="bin/FastMember.dll">
+      <publishTime>03/06/2018 05:29:48</publishTime>
     </File>
     <File Include="bin/FastMember.Signed.dll">
       <publishTime>12/11/2018 00:55:19</publishTime>
@@ -55,7 +61,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="bin/Quantify.API.dll">
-      <publishTime>12/19/2018 01:45:47</publishTime>
+      <publishTime>02/15/2019 02:01:36</publishTime>
     </File>
     <File Include="bin/Quantify.API.dll.config">
       <publishTime>12/11/2018 00:55:18</publishTime>
@@ -64,19 +70,43 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>03/15/2017 03:09:31</publishTime>
     </File>
     <File Include="bin/Quantify.API.pdb">
-      <publishTime>12/19/2018 01:45:47</publishTime>
+      <publishTime>02/15/2019 02:01:36</publishTime>
+    </File>
+    <File Include="bin/System.IO.FileSystem.Primitives.dll">
+      <publishTime>06/11/2016 23:13:46</publishTime>
+    </File>
+    <File Include="bin/System.IO.Packaging.dll">
+      <publishTime>06/11/2016 23:13:48</publishTime>
     </File>
     <File Include="bin/WsQuantify.dll">
-      <publishTime>12/19/2018 01:45:48</publishTime>
+      <publishTime>02/15/2019 02:01:37</publishTime>
     </File>
     <File Include="bin/WsQuantify.pdb">
-      <publishTime>12/19/2018 01:45:48</publishTime>
+      <publishTime>02/15/2019 02:01:37</publishTime>
     </File>
     <File Include="diagramWS.cd">
       <publishTime>12/11/2018 00:55:19</publishTime>
     </File>
     <File Include="ExcelReport.aspx">
       <publishTime>12/11/2018 00:55:19</publishTime>
+    </File>
+    <File Include="img/logo.png">
+      <publishTime>02/02/2019 06:12:18</publishTime>
+    </File>
+    <File Include="js/generatedata.js">
+      <publishTime>02/02/2019 05:34:55</publishTime>
+    </File>
+    <File Include="js/jqx-all.js">
+      <publishTime>02/02/2019 05:33:18</publishTime>
+    </File>
+    <File Include="js/jqx.base.css">
+      <publishTime>02/02/2019 05:34:37</publishTime>
+    </File>
+    <File Include="js/jqx.energyblue.css">
+      <publishTime>02/02/2019 05:34:48</publishTime>
+    </File>
+    <File Include="Reports.aspx">
+      <publishTime>02/13/2019 05:12:07</publishTime>
     </File>
     <File Include="Web.config">
       <publishTime>12/19/2018 01:45:48</publishTime>

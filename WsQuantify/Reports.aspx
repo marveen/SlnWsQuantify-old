@@ -69,15 +69,15 @@
             <img src="img/logo.png" />
         </div>
 
-        <h1> Reporte Por StockLocation </h1>
+        <h1> Generador de Reportes </h1>
 
 
             <form id="FrmReports" method="post" runat="server">
         
         
-                <asp:DropDownList ID="ddlReporte" runat="server">
-                    <asp:ListItem Selected="True" Value="ReporteGeneral">Reporte General</asp:ListItem>
-                    <asp:ListItem Value="ReporteResumen">Reporte Resumen</asp:ListItem>
+                <asp:DropDownList ID="ddlReporte" runat="server" Height="18px" Width="205px">
+                    <asp:ListItem Selected="True" Value="StockedItemCost">Stocked Item Cost</asp:ListItem>
+                    <asp:ListItem Value="StockedItemCostCostumer">Stocked Item Cost Costumer</asp:ListItem>
                 </asp:DropDownList>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         
