@@ -341,23 +341,29 @@ namespace Quantify.API
                     DataTable tableProducts = new DataTable();
                     tableProducts.TableName = "StockedItems";
 
-                    DataColumn idColumn = new DataColumn("id", typeof(string));
+                    //DataColumn idColumn = new DataColumn("id", typeof(string));
                     DataColumn colCodigo = new DataColumn("Codigo", typeof(string));
                     DataColumn colDescription = new DataColumn("Description", typeof(string));
                     DataColumn colCatalog = new DataColumn("Catalog", typeof(string));
-                    DataColumn colWeightEach = new DataColumn("Weight Each", typeof(string));
-                    DataColumn colCostEach = new DataColumn("Cost Each", typeof(string));
-                    DataColumn colQuantityEnArriendo = new DataColumn("Quantity En Arriendo", typeof(string));
-                    DataColumn colQuantityDisponible = new DataColumn("Quantity Disponible", typeof(string));
-                    DataColumn colQuantityReserved = new DataColumn("Quantity Reserved", typeof(string));
-                    DataColumn colQuantityInTransit = new DataColumn("Quantity In Transit", typeof(string));
-                    DataColumn colQuantityNew = new DataColumn("Quantity New", typeof(string));
+                    DataColumn colWeightEach = new DataColumn("Weight Each", typeof(float));
+                    DataColumn colCostEach = new DataColumn("Cost Each", typeof(float));
+                    DataColumn colQuantityEnArriendo = new DataColumn("Quantity En Arriendo", typeof(float));
+                    DataColumn colQuantityDisponible = new DataColumn("Quantity Disponible", typeof(float));
+                    DataColumn colQuantityReserved = new DataColumn("Quantity Reserved", typeof(float));
+                    DataColumn colQuantityInTransit = new DataColumn("Quantity In Transit", typeof(float));
+                    DataColumn colQuantityNew = new DataColumn("Quantity New", typeof(float));
 
 
 
-                    idColumn.AutoIncrement = true;
+                    //Formulas 
+                    DataColumn colEnrenta = new DataColumn("En Renta", typeof(string));
 
-                    tableProducts.Columns.Add(idColumn);
+
+
+
+                    //idColumn.AutoIncrement = true;
+
+                    //tableProducts.Columns.Add(idColumn);
                     tableProducts.Columns.Add(colCodigo);
                     tableProducts.Columns.Add(colDescription);
                     tableProducts.Columns.Add(colCatalog);
@@ -369,10 +375,16 @@ namespace Quantify.API
                     tableProducts.Columns.Add(colQuantityInTransit);
                     tableProducts.Columns.Add(colQuantityNew);
 
+                    //Formulas 
+                    //tableProducts.Columns.Add(colEnrenta);
+
+
+
+                    //Render
                     dataSetProducts.Tables.Add(tableProducts);
 
 
-
+                    int cont = 2; 
                     foreach (StockedProductListItem prod in ProdList)
                     {
 
@@ -410,8 +422,16 @@ namespace Quantify.API
                         TempRow["Quantity In Transit"] = StrQuantityInTransit;
                         TempRow["Quantity New"] = StrQuantityNew;
 
+                        //string strFormular = "=F" + cont.ToString() + "*G" + cont.ToString() + "";
+
+                        //TempRow["En Renta"] = strFormular;
+
 
                         tableProducts.Rows.Add(TempRow);
+
+
+                        cont = cont + 1;
+
 
 
                     }

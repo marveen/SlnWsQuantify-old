@@ -78,6 +78,7 @@
                 <asp:DropDownList ID="ddlReporte" runat="server" Height="18px" Width="205px">
                     <asp:ListItem Selected="True" Value="StockedItemCost">Stocked Item Cost</asp:ListItem>
                     <asp:ListItem Value="StockedItemCostCostumer">Stocked Item Cost Costumer</asp:ListItem>
+                    <asp:ListItem>demo</asp:ListItem>
                 </asp:DropDownList>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         
