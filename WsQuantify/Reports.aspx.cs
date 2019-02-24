@@ -117,7 +117,9 @@ namespace WsQuantify
                     ws.Cell(1, 21).Value = "$ m2 en bodega";
                     ws.Cell(1, 22).Value = "$ M2 total ";
                     ws.Cell(1, 23).Value = "$ Total U ";
-                    ws.Cell(1, 24).Value = "$ 0,7 ";
+                    ws.Cell(1, 24).Value = 0.7;
+                    ws.Cell(1, 24).Style.NumberFormat.NumberFormatId = 2;
+
                     ws.Cell(1, 25).Value = "$ Falta ";
                     ws.Cell(1, 26).Value = "$ Comprar";
                     ws.Cell(1, 27).Value = "$ Sobra ";
@@ -141,8 +143,13 @@ namespace WsQuantify
                             cellWithFormula13.FormulaA1 = Formula;
 
                             var cellWithFormula14 = ws.Cell(i, 14);
-                            Formula = "SI.ERROR(K3/M3;0)";
+                            Formula = "=IF(M" + i.ToString() + "=0,0,K" + i.ToString() + "/M" + i.ToString() + ")"; //  "IFERROR(K" + i.ToString() + "/M" + i.ToString() + ";0)";
                             cellWithFormula14.FormulaA1 = Formula;
+                            cellWithFormula14.Style.NumberFormat.NumberFormatId = 9; 
+
+
+
+
 
 
                             var cellWithFormula15 = ws.Cell(i, 15);
@@ -185,20 +192,23 @@ namespace WsQuantify
 
 
                         var cellWithFormula24 = ws.Cell(i, 24);
-                        Formula = "";//"=+ENTERO(F3/X$2)*(1+W$1)";
+                        Formula = "=INT(F" + i.ToString() + "/X$1)*(1)";
                         cellWithFormula24.FormulaA1 = Formula;
 
+                        cellWithFormula24.Style.NumberFormat.NumberFormatId = 3;
+
+
                         var cellWithFormula25 = ws.Cell(i, 25);
-                        Formula = ""; // "=SI(+X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ">0;X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ";0)";
+                        Formula = ""; // "IF(+X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ">0;X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ";0)";
                         cellWithFormula25.FormulaA1 = Formula;
 
                         var cellWithFormula26 = ws.Cell(i, 26);
-                        Formula = "=+Y" + i.ToString() + "*E" + i.ToString() + "";
+                        Formula = ""; // "=Y" + i.ToString() + "*E" + i.ToString() + "";
                         cellWithFormula26.FormulaA1 = Formula;
 
 
                         var cellWithFormula27 = ws.Cell(i, 27);
-                        Formula = ""; // "=+SI(X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + "<0;-(X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ");0)";
+                        Formula = ""; //"=+IF(X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + "<0;-(X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ");0)";
                         cellWithFormula27.FormulaA1 = Formula;
 
 
