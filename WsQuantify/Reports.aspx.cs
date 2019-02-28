@@ -1183,10 +1183,6 @@ namespace WsQuantify
 
 
 
-                            Formula = "=SUM(K3,K" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 28).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 28).Style.NumberFormat.NumberFormatId = 3;
-
                           
 
 
