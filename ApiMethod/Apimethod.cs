@@ -353,10 +353,31 @@ namespace Quantify.API
                     DataColumn colQuantityInTransit = new DataColumn("Quantity In Transit", typeof(float));
                     DataColumn colQuantityNew = new DataColumn("Quantity New", typeof(float));
 
+                    //set reporte
+                    DataColumn Colrenta = new DataColumn("$ Renta", typeof(float));
+
+                    
+                       DataColumn ColEnBode = new DataColumn("$ En Bodega", typeof(float));	
+                       DataColumn ColTotal = new DataColumn("$ Total", typeof(float));	
+                       DataColumn ColPorcent = new DataColumn("$ Porcentaje", typeof(float));	
+                       DataColumn ColKgUnit = new DataColumn("$ Kg Unit", typeof(float));	
+                       DataColumn ColKgenr = new DataColumn("$ Kg en renta", typeof(float));	
+                       DataColumn ColKgenb = new DataColumn("$ Kg en bodega", typeof(float));	
+                       DataColumn ColKgtota = new DataColumn("$ Kg total", typeof(float));	
+                       DataColumn Colm2Unit = new DataColumn("$ m2 Unit", typeof(float));	
+                       DataColumn Colm2enR = new DataColumn("$ m2 en Renta", typeof(float));	
+                       DataColumn Colm2enb = new DataColumn("$ m2 en bodega", typeof(float));	
+                       DataColumn ColM2tota = new DataColumn("$ M2 total", typeof(float)); 	
+                       DataColumn ColTotalU = new DataColumn("$ Total U", typeof(float)); 	
+                       DataColumn Col70 = new DataColumn("0,70", typeof(float));	
+                       DataColumn ColFalta = new DataColumn("$ Falta", typeof(float)); 	
+                       DataColumn ColComprar = new DataColumn("$ Comprar", typeof(float));	
+                       DataColumn ColSobra = new DataColumn("$ Sobra", typeof(float)); 	
+                       DataColumn ColVender = new DataColumn("$ Vender", typeof(float));
+
+                    
 
 
-                    //Formulas 
-                    DataColumn colEnrenta = new DataColumn("En Renta", typeof(string));
 
 
 
@@ -375,8 +396,27 @@ namespace Quantify.API
                     tableProducts.Columns.Add(colQuantityInTransit);
                     tableProducts.Columns.Add(colQuantityNew);
 
+
+
                     //Formulas 
-                    //tableProducts.Columns.Add(colEnrenta);
+                    tableProducts.Columns.Add(Colrenta);
+                    tableProducts.Columns.Add(ColEnBode);
+                    tableProducts.Columns.Add(ColTotal);
+                    tableProducts.Columns.Add(ColPorcent);
+                    tableProducts.Columns.Add(ColKgUnit);
+                    tableProducts.Columns.Add(ColKgenr);
+                    tableProducts.Columns.Add(ColKgenb); 
+                    tableProducts.Columns.Add(ColKgtota);
+                    tableProducts.Columns.Add(Colm2Unit);
+                    tableProducts.Columns.Add(Colm2enR);
+                    tableProducts.Columns.Add(Colm2enb);
+                    tableProducts.Columns.Add(ColM2tota);
+                    tableProducts.Columns.Add(ColTotalU);
+                    tableProducts.Columns.Add(Col70);
+                    tableProducts.Columns.Add(ColFalta); 
+                    tableProducts.Columns.Add(ColComprar);
+                    tableProducts.Columns.Add(ColSobra);
+                    tableProducts.Columns.Add(ColVender);
 
 
 
@@ -424,7 +464,28 @@ namespace Quantify.API
 
                         //string strFormular = "=F" + cont.ToString() + "*G" + cont.ToString() + "";
 
-                        //TempRow["En Renta"] = strFormular;
+                        TempRow["$ Renta"] = 0;
+                        TempRow["$ En Bodega"] = 0;
+                        TempRow["$ Total"] = 0;
+                        TempRow["$ Porcentaje"] = 0;
+                        TempRow["$ Kg Unit"] = 0;
+                        TempRow["$ Kg en renta"] = 0;
+                        TempRow["$ Kg en bodega"] = 0;
+                        TempRow["$ Kg total"] = 0;
+                        TempRow["$ m2 Unit"] = 0;
+                        TempRow["$ m2 en Renta"] = 0;
+                        TempRow["$ m2 en bodega"] = 0;
+                        TempRow["$ M2 total"] = 0;
+                        TempRow["$ Total U"] = 0;
+                        TempRow["0,70"] = 0;
+                        TempRow["$ Falta"] = 0;
+                        TempRow["$ Comprar"] = 0;
+                        TempRow["$ Sobra"] = 0;
+                        TempRow["$ Vender"] = 0;
+                        /*
+                         $ En Bodega	$ Total	$ Porcentaje	$ Kg Unit	$ Kg en renta	$ Kg en bodega	$ Kg total	$ m2 Unit	$ m2 en Renta	$ m2 en bodega	$ M2 total 	$ Total U 	0,70	$ Falta 	$ Comprar	$ Sobra 	$ Vender
+
+                         */
 
 
                         tableProducts.Rows.Add(TempRow);
