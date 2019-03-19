@@ -105,6 +105,7 @@
     <Content Include="js\jqx-all.js" />
     <Content Include="js\jqx.base.css" />
     <Content Include="js\jqx.energyblue.css" />
+    <Content Include="Login.aspx" />
     <Content Include="Reports.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -120,6 +121,13 @@
     </Compile>
     <Compile Include="ExcelReport.aspx.designer.cs">
       <DependentUpon>ExcelReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports.aspx.cs">

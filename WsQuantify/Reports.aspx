@@ -6,7 +6,7 @@
 <head runat="server">
     <title></title>
 </head>
-    <style>
+    <style type="text/css">
 
         body {
              font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

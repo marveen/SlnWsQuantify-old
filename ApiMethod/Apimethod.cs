@@ -87,14 +87,24 @@ namespace Quantify.API
                     dataSetProducts.Tables.Add(tableProducts);
 
 
+                    //marcar al cambiar el nmbre de Customername
+
+                    String StrClientLoop = "";
+                    int IntConta = 1;
+
+
+                    decimal? Total_SumaTotalCost = 0;
+                    double?  Total_SumaWeight = 0;
+
                     foreach (DataRow PivotDrow in DwLocationsSorted.Rows)
                     {
-
+                        bool AgregarTotal = false;
                 
                     
                         String StrCliente = (PivotDrow["CustomerName"].ToString() != null) ? PivotDrow["CustomerName"].ToString() : "NoName";
                         String StrStockingLocation = (PivotDrow["StockingLocationID"].ToString() != null) ? PivotDrow["StockingLocationID"].ToString() : "NoName";
 
+                        
 
                         if (StrCliente.Length == 0)
                         {
@@ -113,6 +123,7 @@ namespace Quantify.API
                         String StrAdminProyecto = (jsite.JobEmployee1 != null) ? jsite.JobEmployee1.ToString() : "No Data";
 
 
+                       
 
                    
                         DataRow TempRow = tableProducts.NewRow();
@@ -147,11 +158,18 @@ namespace Quantify.API
                         double?  SumaWeight = 0;
 
 
+
+                      
+
                         foreach (StockedProductListItem item in StockedPrds)
                         {
+                            double? tmppW = 0; 
+                            tmppW =  (item.Weight != null) ? item.Weight : 0;
+                            SumaWeight = SumaWeight + tmppW;
 
-                            SumaWeight = SumaWeight + item.WeightOnRent;
-                            SumaTotalCost = SumaTotalCost + item.DefaultCost;
+                            decimal? tmpC = 0;
+                            tmpC = (item.DefaultCost != null) ? item.DefaultCost : 0;
+                            SumaTotalCost = SumaTotalCost + tmpC;
 
 
                         }
@@ -161,19 +179,93 @@ namespace Quantify.API
                         TempRow["Weight En Arriendo"] = SumaWeight.ToString();
 
 
+                        //Antes de cerrar hay que poner la suma 
 
 
-                        //commit s tabla Salida
+
+
+
+
+                        if (StrCliente == "ASA CUATRO SPA")
+                        {
+                            bool boll = true;
+                        }
+
+
+                        if (StrClientLoop != StrCliente)
+                        {
+
+                            //antes de peder la suma de abajo tendrmeos uqe 
+                            //Guardar los totales anteirores
+
+                            DataRow TempRowTotal = tableProducts.NewRow();
+                            TempRowTotal["Cliente"] = StrClientLoop;
+                            TempRowTotal["Name"] = "";
+                            TempRowTotal["Number"] = "";
+
+                            TempRowTotal["Administrador de Proyecto"] = "";
+                            TempRowTotal["Total Cost"] = Total_SumaTotalCost;
+                            TempRowTotal["Weight En Arriendo"] = Total_SumaWeight;
+                            //commit s tabla Salida
+                            tableProducts.Rows.Add(TempRowTotal);
+
+                            //volver a 0 los sumadores 
+                            Total_SumaTotalCost = SumaTotalCost;
+                            Total_SumaWeight = SumaWeight;
+
+
+                        }
+                        else {
+                            //Total_SumaTotalCost = Total_SumaTotalCost + SumaTotalCost;
+                            Total_SumaWeight = Total_SumaWeight + SumaWeight;
+
+                        }
+
+
+
+                
+
+          
+
+                        //Actualiza nombrepara loop
+                        StrClientLoop = StrCliente;
+
+                       // IntConta = IntConta + 1;
+
+
+                        ////commit s tabla Salida
                         tableProducts.Rows.Add(TempRow);
+
+
+                        //siemprea va sumando el total de totales 
+
+
+
+
 
 
 
                     }
 
 
+                    //SE AGREGA TOTAL FINAL 
+
+                    DataRow TempRowTotalF = tableProducts.NewRow();
+                    TempRowTotalF["Cliente"] = "";
+                    TempRowTotalF["Name"] = "";
+                    TempRowTotalF["Number"] = "";
+                                
+                    TempRowTotalF["Administrador de Proyecto"] = "0";
+                    TempRowTotalF["Total Cost"] = "0";
+                    TempRowTotalF["Weight En Arriendo"] = "0";
+                    //commit s tabla Salida
+                    tableProducts.Rows.Add(TempRowTotalF);
+
+
                     dataSetProducts.AcceptChanges();
                     StrSalida = JsonConvert.SerializeObject(dataSetProducts, Formatting.Indented);
 
+                  
 
                     //List<Guid> LocationList = new List<Guid>();
 
