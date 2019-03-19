@@ -207,7 +207,11 @@ namespace Quantify.API
                             TempRowTotal["Total Cost"] = Total_SumaTotalCost;
                             TempRowTotal["Weight En Arriendo"] = Total_SumaWeight;
                             //commit s tabla Salida
-                            tableProducts.Rows.Add(TempRowTotal);
+                            if (IntConta > 1)
+                            {
+                                tableProducts.Rows.Add(TempRowTotal);
+                            }
+                           
 
                             //volver a 0 los sumadores 
                             Total_SumaTotalCost = SumaTotalCost;
@@ -216,7 +220,7 @@ namespace Quantify.API
 
                         }
                         else {
-                            //Total_SumaTotalCost = Total_SumaTotalCost + SumaTotalCost;
+                            Total_SumaTotalCost = Total_SumaTotalCost + SumaTotalCost;
                             Total_SumaWeight = Total_SumaWeight + SumaWeight;
 
                         }
@@ -230,7 +234,7 @@ namespace Quantify.API
                         //Actualiza nombrepara loop
                         StrClientLoop = StrCliente;
 
-                       // IntConta = IntConta + 1;
+                        IntConta = IntConta + 1;
 
 
                         ////commit s tabla Salida
