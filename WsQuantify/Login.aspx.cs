@@ -20,6 +20,30 @@ namespace WsQuantify
         protected void Page_Load(object sender, EventArgs e)
         {
 
+            String StrAlerta = System.Web.HttpContext.Current.Session["_Error"] as String;
+
+            if (StrAlerta == "logout")
+            {
+
+            }
+            else
+            {
+                if (StrAlerta == null)
+                {
+                    StrAlerta = "";
+                }
+
+                if (StrAlerta.Length > 0)
+                {
+                    Response.Write("<script type='text/javascript'>alert('" + StrAlerta + "')</script>");
+                }
+
+            }
+
+            
+            
+
+
         }
 
         protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
@@ -50,8 +74,41 @@ namespace WsQuantify
             StrJsonUser = Wsneed.ValidateUser(strpais, StrUser, Strpass);
             //DsetReport = GetDataSet(StrJsonUser);
 
+            bool AccesoOK = false;
+            AccesoOK = StrJsonUser.Contains("OK");
 
-            Response.Redirect("Reports.aspx");
+
+
+            if (AccesoOK)
+            {
+                //creaer Variables de sesion 
+
+                //GUARDA
+                System.Web.HttpContext.Current.Session["_strpais"] = strpais;
+                System.Web.HttpContext.Current.Session["_StrUser"] = StrUser;
+                System.Web.HttpContext.Current.Session["_Strpass"] = Strpass;
+
+
+                //LEE
+                //ViewData["sessionString"] = System.Web.HttpContext.Current.Session["sessionString"] as String; 
+                string _StrUser, _Strpass, _strpais;
+                _StrUser = System.Web.HttpContext.Current.Session["_StrUser"] as String;
+                _Strpass = System.Web.HttpContext.Current.Session["_Strpass"] as String;
+                _strpais = System.Web.HttpContext.Current.Session["_strpais"] as String;
+
+                               
+                Response.Redirect("Reports.aspx");
+            }
+            else
+            {
+
+                System.Web.HttpContext.Current.Session["_Error"] = "Credenciales Inválidas";                                     
+                Response.Redirect("Login.aspx");
+            }
+                
+
+             
+
 
         }
 

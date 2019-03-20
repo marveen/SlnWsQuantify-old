@@ -20,10 +20,55 @@ namespace WsQuantify
         WsQuantify.WebServiceQuantify Wsneed = new WebServiceQuantify();
 
         String StrJsonReport = "";
+        string _StrUser, _Strpass, _strpais;
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
             //Response.Write(StrJsonReport);
+            bool SessionON = false;
+
+            //Si no Existe Session al login 
+
+            try
+            {
+                _StrUser = System.Web.HttpContext.Current.Session["_StrUser"] as String;
+                _Strpass = System.Web.HttpContext.Current.Session["_Strpass"] as String;
+                _strpais = System.Web.HttpContext.Current.Session["_strpais"] as String;
+
+                if (_StrUser.Length > 0 && _strpais.Length > 0  && _Strpass.Length > 0)
+                {
+
+                    SessionON = true;
+
+                }
+
+
+                if (!SessionON)
+                {
+
+                    Response.Redirect("Login.aspx");
+                }
+                else
+                {
+                    //Response.Redirect("Login.aspx");
+                    //parsar.
+                }
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+
+                Response.Redirect("Login.aspx");
+
+            }
+
+            
+
         }
 
 
@@ -883,10 +928,22 @@ namespace WsQuantify
             return ds;
         }
 
+        protected void BtnSalir_Click(object sender, EventArgs e)
+        {
 
 
-  
+            System.Web.HttpContext.Current.Session["_strpais"] = "";
+            System.Web.HttpContext.Current.Session["_StrUser"] = "";
+            System.Web.HttpContext.Current.Session["_Strpass"] = "";
 
+
+            System.Web.HttpContext.Current.Session["_Error"] = "logout";
+            
+
+            Response.Redirect("Login.aspx");
+
+
+        }
 
         private void GeneraExcel(string StrFilename)
         {
@@ -1280,11 +1337,14 @@ namespace WsQuantify
 
             switch (StrFilename)
             {
+
+                //antes : StrJsonReport = Wsneed.GetReportCustomerSL("cl", "consultaweb", "Unispan.001"); 
+
                 case "StockedItemCost":
 
                     StrFilename = "StockedItemCost_CL.xlsx";
-                    StrJsonReport = Wsneed.GetProductoReport("cl", "consultaweb", "Unispan.001");
-                    DsetReport = GetDataSet(StrJsonReport);
+                    StrJsonReport = Wsneed.GetProductoReport(_strpais,  _StrUser, _Strpass);
+                    //DsetReport = GetDataSet(StrJsonReport);
                     GeneraExcel(StrFilename);
 
                     break;
@@ -1292,7 +1352,7 @@ namespace WsQuantify
                 case "StockedItemCostCostumer":
 
                     StrFilename = "StockedItemCostCostumer_CL.xlsx";
-                    StrJsonReport = Wsneed.GetReportCustomerSL("cl", "consultaweb", "Unispan.001");
+                    StrJsonReport = Wsneed.GetReportCustomerSL(_strpais, _StrUser, _Strpass);
                     DsetReport = GetDataSet(StrJsonReport);
                     GeneraExcel(StrFilename);
                     break;

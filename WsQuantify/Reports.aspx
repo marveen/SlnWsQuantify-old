@@ -64,16 +64,25 @@
    
     <body>
 
-        <div align="center">
+        <form id="FrmReports" method="post" runat="server">
 
+            <div id="DivBtnSalir" style="position:absolute; right:0px; margin-right:80px; margin-top:50px;">                    
+                <asp:button id="BtnSalir" runat="server" Text="Cerrar Sesión" OnClick="BtnSalir_Click"/> 
+
+            </div>
+
+        <div align="center">
+            
             <img src="img/logo.png" />
+
+            
         </div>
 
         <h1> Generador de Reportes </h1>
 
 
-            <form id="FrmReports" method="post" runat="server">
-        
+            
+                
         
                 <asp:DropDownList ID="ddlReporte" runat="server" Height="18px" Width="205px">
                     <asp:ListItem Selected="True" Value="StockedItemCost">Stocked Item Cost</asp:ListItem>
