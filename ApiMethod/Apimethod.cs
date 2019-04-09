@@ -199,7 +199,7 @@ namespace Quantify.API
                             //Guardar los totales anteirores
 
                             DataRow TempRowTotal = tableProducts.NewRow();
-                            TempRowTotal["Cliente"] = StrClientLoop;
+                            TempRowTotal["Cliente"] = StrClientLoop + " Total ";
                             TempRowTotal["Name"] = "";
                             TempRowTotal["Number"] = "";
 

@@ -1058,7 +1058,7 @@ namespace WsQuantify
                         string StrQuery = "";
                         string Strcodigo = "";
                         var TempCel = ws.Cell(i, 1);
-                        Strcodigo = TempCel.Value.ToString();
+                        Strcodigo = TempCel.Value.ToString().Replace("'", "");
                         StrQuery = "Codigo = '" + Strcodigo + "'";
                         DataRow[] result = DtArea.Select(StrQuery);
                         if (result.Length > 0)
@@ -1140,38 +1140,40 @@ namespace WsQuantify
                             int FinalData = IntFilas - 1;
                             int PosFormula = IntFilas;
                             var cellWithFormula_1 = ws.Cell(PosFormula, 6);
-                            Formula = "=SUM(F2:F" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,F2:F" + FinalData.ToString() + ")";
+                            //ce.RegisterFunction("SUBTOTAL", 2, 255, Subtotal);
                             cellWithFormula_1.FormulaA1 = Formula;
                             cellWithFormula_1.Style.NumberFormat.NumberFormatId = 3;
 
 
-                            Formula = "=SUM(G2:G" + FinalData.ToString() + ")";
+                            // Formula = "=SUM(G2:G" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,G2:G" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 7).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 7).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(H2:H" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,H2:H" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 8).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 8).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(I2:I" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,I2:I" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 9).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 9).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(J2:J" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,J2:J" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 10).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 10).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(K2:K" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,K2:K" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 11).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 11).Style.NumberFormat.NumberFormatId = 3;
 
 
-                            Formula = "=SUM(L2:L" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,L2:L" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 12).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 12).Style.NumberFormat.NumberFormatId = 3;
 
 
-                            Formula = "=SUM(M2:M" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,M2:M" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 13).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 13).Style.NumberFormat.NumberFormatId = 3;
 
@@ -1181,61 +1183,61 @@ namespace WsQuantify
                             ws.Cell(PosFormula, 14).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 14).Style.NumberFormat.NumberFormatId = 9;
 
-                            Formula = "=SUM(O2:O" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,O2:O" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 15).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 15).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(P2:P" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,P2:P" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 16).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 16).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(Q2:Q" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,Q2:Q" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 17).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 17).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(R2:R" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,R2:R" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 18).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 18).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(S2:S" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,S2:S" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 19).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 19).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(T2:T" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,T2:T" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 20).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 20).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(U2:U" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,U2:U" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 21).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 21).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(V2:V" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,V2:V" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 22).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 22).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(W2:W" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,W2:W" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 23).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 23).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(X2:X" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,X2:X" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 24).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 24).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(Y2:Y" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,Y2:Y" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 25).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 25).Style.NumberFormat.NumberFormatId = 3;
 
-                            Formula = "=SUM(Z2:Z" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,Z2:Z" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 26).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 26).Style.NumberFormat.NumberFormatId = 3;
 
 
-                            Formula = "=SUM(AA2:AA" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,AA2:AA" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 27).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 27).Style.NumberFormat.NumberFormatId = 3;
 
 
-                            Formula = "=SUM(AB2:AB" + FinalData.ToString() + ")";
+                            Formula = "=SUBTOTAL(9,AB2:AB" + FinalData.ToString() + ")";
                             ws.Cell(PosFormula, 28).FormulaA1 = Formula;
                             ws.Cell(PosFormula, 28).Style.NumberFormat.NumberFormatId = 3;
 
@@ -1266,11 +1268,20 @@ namespace WsQuantify
                     string tmpForm = "";
                     var cellWithFormula = ws.Cell(6, 777);
 
-                  
+
+                    //poner titulo al reporte
+                    ws.Row(1).InsertRowsAbove(1);
+                    ws.Cell(1, 1).Value = DateTime.Now.ToShortDateString();
+
+          
+
+
+
+
 
 
                     #endregion
-                break;
+                    break;
 
                 case "StockedItemCostCostumer_CL.xlsx":
                     #region StockedItemCost_CL
@@ -1291,12 +1302,27 @@ namespace WsQuantify
                         var cellWithFormula21 = ws.Cell(i, 6);
                         cellWithFormula21.SetDataType(XLDataType.Number);
                         cellWithFormula21.Style.NumberFormat.NumberFormatId = 4;
-
-
                     }
 
 
-                
+                    //poner titulo al reporte
+                    ws.Row(1).InsertRowsAbove(1);
+                    ws.Cell(1, 1).Value = DateTime.Now.ToShortDateString();
+
+
+
+                    //formateo de las 28 col
+                    int cols2 = 7;
+                    for (int i = 1; i <= cols2; i++)
+                    {
+                        /*
+                        $ En Bodega	$ Total	$ Porcentaje	$ Kg Unit	$ Kg en renta	$ Kg en bodega	$ Kg total	$ m2 Unit	$ m2 en Renta	$ m2 en bodega	$ M2 total 	$ Total U 	0,70	$ Falta 	$ Comprar	$ Sobra 	$ Vender
+                        */
+                        ws.Column(i).AdjustToContents();
+
+                        //Totales 
+                        // var cellWithFormula27 = ws.Cell(i,IntFilas+1);
+                    }
 
 
 
@@ -1344,7 +1370,7 @@ namespace WsQuantify
 
                     StrFilename = "StockedItemCost_CL.xlsx";
                     StrJsonReport = Wsneed.GetProductoReport(_strpais,  _StrUser, _Strpass);
-                    //DsetReport = GetDataSet(StrJsonReport);
+                    DsetReport = GetDataSet(StrJsonReport);
                     GeneraExcel(StrFilename);
 
                     break;

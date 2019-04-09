@@ -48,10 +48,11 @@
                         <td>
                               <select id="DdlPais" runat="server" style="width:150px;">
                                   <option value="cl">Chile</option>
-                               <%--   <option value="co">Colombia</option>
+                              <option value="co">Colombia</option>
                                   <option value="mx">Mexico</option>
                                   <option value="pa">Panama</option>
-                                  <option value="pe">Peru</option>--%>
+                                  <option value="pe">Peru</option>
+                                  <option value="usa">Usa</option>
                               </select>      
 
                         </td>
