@@ -1140,10 +1140,28 @@ namespace WsQuantify
                             int FinalData = IntFilas - 1;
                             int PosFormula = IntFilas;
                             var cellWithFormula_1 = ws.Cell(PosFormula, 6);
+
+
+
+
+                            Formula = "=SUBTOTAL(9,D2:D" + FinalData.ToString() + ")";
+               
+                           
+                            ws.Cell(PosFormula, 4).FormulaA1 = Formula;
+                            ws.Cell(PosFormula, 4).Style.NumberFormat.NumberFormatId = 3;
+
+
+                            Formula = "=SUBTOTAL(9,E2:E" + FinalData.ToString() + ")";
+                            ws.Cell(PosFormula,5).FormulaA1 = Formula;
+                            ws.Cell(PosFormula, 5).Style.NumberFormat.NumberFormatId = 3;
+
+
+
                             Formula = "=SUBTOTAL(9,F2:F" + FinalData.ToString() + ")";
-                            //ce.RegisterFunction("SUBTOTAL", 2, 255, Subtotal);
-                            cellWithFormula_1.FormulaA1 = Formula;
-                            cellWithFormula_1.Style.NumberFormat.NumberFormatId = 3;
+                        
+                            ws.Cell(PosFormula, 6).FormulaA1 = Formula;
+                            ws.Cell(PosFormula, 6).Style.NumberFormat.NumberFormatId = 3;
+
 
 
                             // Formula = "=SUM(G2:G" + FinalData.ToString() + ")";
@@ -1333,6 +1351,14 @@ namespace WsQuantify
 
 
             }
+
+            //CAmbiarNombre Archivo por pais 
+
+            string strreplacefor = System.Web.HttpContext.Current.Session["_strpais"] as String;
+
+            strreplacefor = "_" + strreplacefor.ToUpper();
+
+            StrFilename = StrFilename.Replace("_CL", strreplacefor);
 
 
 

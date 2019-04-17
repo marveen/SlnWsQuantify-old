@@ -16,13 +16,13 @@ C:\Report Importer\bin\Debug\zh-Hant\Avontus.Rental.Utility.resources.dll
 C:\Report Importer\obj\Debug\Quantify.API.exe
 C:\Report Importer\obj\Debug\Quantify.API.pdb
 C:\Report Importer\bin\Debug\Quantify.API.exe.config
-C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Debug\Quantify.API.csprojAssemblyReference.cache
-C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Debug\Quantify.API.csproj.CoreCompileInputs.cache
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\Quantify.API.dll.config
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\Quantify.API.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\Quantify.API.pdb
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\Newtonsoft.Json.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\bin\Debug\Newtonsoft.Json.xml
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Debug\Quantify.API.csprojAssemblyReference.cache
+C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Debug\Quantify.API.csproj.CoreCompileInputs.cache
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Debug\Quantify.API.csproj.CopyComplete
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Debug\Quantify.API.dll
 C:\Users\storrealba\Documents\GitHub\SlnWsQuantify\ApiMethod\obj\Debug\Quantify.API.pdb
