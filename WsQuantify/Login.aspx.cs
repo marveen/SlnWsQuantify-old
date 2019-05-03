@@ -65,7 +65,8 @@ namespace WsQuantify
             string StrUser, Strpass, strpais;
             StrUser = txname.Value;
             Strpass = txpass.Value;
-            strpais = DdlPais.Value;
+
+            strpais = txPais.Value;
 
             //validar usuario con Servicio. 
             String StrJsonUser = "";

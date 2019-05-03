@@ -53,8 +53,21 @@ namespace Quantify.API
                     DataTable locations = orgData.Tables[0];
 
                     locations.DefaultView.Sort = "CustomerName ASC";
-
                     DataTable DwLocationsSorted = locations.DefaultView.ToTable();
+
+
+                    //subtables de consulta 
+                    DataView dv = new DataView(locations);
+                    dv.RowFilter = "TradingPartnerType = 3"; // query example = "id = 10"
+
+
+                    DataView dv2 = new DataView(locations);
+                    dv2.RowFilter = "TradingPartnerType = 4 "; // query example = "id = 10"
+
+
+
+
+                    
 
                     //Armando Tabla de Salida
 
@@ -2363,6 +2376,9 @@ string sortExp = "City";
                     orgTree.BuildTreeView(tvOrganization, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.PrimaryTradingPartnerID);
 
                     System.Windows.Forms.TreeNode oMainNode = tvOrganization.Nodes[0];
+                   // System.Windows.Forms.TreeNode oMainNode2 = tvOrganization.Nodes[1];
+
+
 
 
                     NodeTag MainTag = (NodeTag)oMainNode.Tag;

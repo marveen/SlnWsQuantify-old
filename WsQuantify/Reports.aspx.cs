@@ -36,6 +36,43 @@ namespace WsQuantify
                 _Strpass = System.Web.HttpContext.Current.Session["_Strpass"] as String;
                 _strpais = System.Web.HttpContext.Current.Session["_strpais"] as String;
 
+
+                switch (_strpais)
+                {
+
+                    case "cl":
+                        cl.Visible = true;
+                        _fileViewer.AltRelFilePath = "~/reports/CHILE";
+                        break;
+
+                    case "pe":
+                        pe.Visible = true;
+                        _fileViewer.AltRelFilePath = "~/reports/PERU";
+                        break;
+
+                    case "co":
+                        co.Visible = true;
+                        _fileViewer.AltRelFilePath = "~/reports/COLOMBIA";
+                        break;
+
+                    case "pa":
+                        pa.Visible = true;
+                        _fileViewer.AltRelFilePath = "~/reports/PANAMA";
+                        break;
+
+                    case "mx":
+                        mx.Visible = true;
+                        _fileViewer.AltRelFilePath = "~/reports/MEXICO";
+                        break;
+
+                    case "usa":
+                        usa.Visible = true;
+                         _fileViewer.AltRelFilePath = "~/reports/USA"; 
+
+
+                        break;
+                }
+
                 if (_StrUser.Length > 0 && _strpais.Length > 0  && _Strpass.Length > 0)
                 {
 
