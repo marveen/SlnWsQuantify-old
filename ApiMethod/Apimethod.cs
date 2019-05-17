@@ -13,12 +13,35 @@ using Avontus.Core.Data;
 using Avontus.Rental.Library;
 using Avontus.Rental.Library.Security;
 using Quantify.API;
+using System.Windows.Forms;
 
 namespace Quantify.API
 {
     public class Apimethod
-    {    
+    {
+
+        static void flattenTreeView(TreeNode currentNode, List<TreeNode> nodes)
+        {
+
+
+            if (currentNode is null) { return; }
+            nodes.Add(currentNode);
+            foreach (TreeNode child in currentNode.Nodes)
+            {
+                flattenTreeView(child, nodes);
+            }
+        }
+
+        //Reporte 3 
+        public string GetReport3(String StrCodPais, String StrUser, String Strpass)
+        {
+            string StraSalida = "";
+
+
+            return StraSalida;
+        }
         
+        //Reporte 2         
         public string GetReportCustomerSL(String StrCodPais, String StrUser, String Strpass)
         {
             String StrSalida ="";
@@ -81,10 +104,16 @@ namespace Quantify.API
                     DataColumn colClliente = new DataColumn("Cliente", typeof(string));
                     DataColumn colName = new DataColumn("Name", typeof(string));
                     DataColumn colNumber = new DataColumn("Number", typeof(string));
+
                     DataColumn colTotalCost = new DataColumn("Total Cost", typeof(string));
+                    DataColumn colListArriendo = new DataColumn("List en Arriendo", typeof(string));
+
                     DataColumn colWeightArriendo = new DataColumn("Weight En Arriendo", typeof(string));
                     DataColumn colAdministrador = new DataColumn("Administrador de Proyecto", typeof(string));
-               
+
+                    //bodega HDP
+                    DataColumn colBodega = new DataColumn("Bodega", typeof(string));
+
 
                     idColumn.AutoIncrement = true;
 
@@ -93,8 +122,10 @@ namespace Quantify.API
                     tableProducts.Columns.Add(colName);
                     tableProducts.Columns.Add(colNumber);
                     tableProducts.Columns.Add(colTotalCost);
+                    tableProducts.Columns.Add(colListArriendo);
                     tableProducts.Columns.Add(colWeightArriendo);
                     tableProducts.Columns.Add(colAdministrador);
+                    tableProducts.Columns.Add(colBodega);
                 
 
                     dataSetProducts.Tables.Add(tableProducts);
@@ -107,13 +138,18 @@ namespace Quantify.API
 
 
                     decimal? Total_SumaTotalCost = 0;
+                    decimal? Total_SumaListOnRent = 0;
                     double?  Total_SumaWeight = 0;
 
                     foreach (DataRow PivotDrow in DwLocationsSorted.Rows)
                     {
                         bool AgregarTotal = false;
-                
-                    
+
+
+
+                        String Strbodega = "";
+                        
+                            
                         String StrCliente = (PivotDrow["CustomerName"].ToString() != null) ? PivotDrow["CustomerName"].ToString() : "NoName";
                         String StrStockingLocation = (PivotDrow["StockingLocationID"].ToString() != null) ? PivotDrow["StockingLocationID"].ToString() : "NoName";
 
@@ -125,7 +161,7 @@ namespace Quantify.API
                         }
 
 
-
+                        String StrLocId = (PivotDrow["StockingLocationID"].ToString() != null) ? PivotDrow["StockingLocationID"].ToString() : "NoData"; 
                         String StrName = (PivotDrow["Name"].ToString() != null) ? PivotDrow["Name"].ToString() : "NoName";
 
                         String StrNumber = (PivotDrow["Number"].ToString() != null) ? PivotDrow["Number"].ToString() : "NoName";
@@ -142,6 +178,9 @@ namespace Quantify.API
                         DataRow TempRow = tableProducts.NewRow();
                         TempRow["Cliente"] = StrCliente;
                         TempRow["Name"] = StrName;
+
+                  
+
                         TempRow["Number"] = StrNumber;
 
                         TempRow["Administrador de Proyecto"] = StrAdminProyecto;
@@ -169,10 +208,10 @@ namespace Quantify.API
 
                         decimal?  SumaTotalCost = 0;
                         double?  SumaWeight = 0;
+                        decimal? SumaListOnRent = 0;
 
 
 
-                      
 
                         foreach (StockedProductListItem item in StockedPrds)
                         {
@@ -185,18 +224,59 @@ namespace Quantify.API
                             SumaTotalCost = SumaTotalCost + tmpC;
 
 
+                            decimal? tmpRent = 0;
+                            tmpRent = (item.DefaultList != null) ? item.DefaultList : 0;
+                            SumaListOnRent = SumaListOnRent + tmpRent;
+
+                        }
+
+                        if (StrName == "ALGARROBAL III")
+
+                        {
+                            string straalgo;
+                            straalgo = "Tenemos que uscar el on rent  list";
+                            
                         }
 
 
+
+                        StockingLocation Local2 = StockingLocation.GetStockingLocation(Guid.Parse(StrLocId), true, true);
+
+                        //bodega
+                        /* if (Local2.ParentTradingPartner.ParentTradingPartner.ParentTradingPartner != null)
+                         {
+                             TempRow["Bodega"] = Local2.ParentTradingPartner.ParentTradingPartner.ParentTradingPartner.Name;
+                         }
+                         else 
+                         */
+                        TempRow["Bodega"] = Local2.ParentBranchOrLaydown.FormattedName;
+
+                        if (Local2.ParentTradingPartner.ParentTradingPartner != null)
+                        {
+                            TempRow["Bodega"] = Local2.ParentTradingPartner.ParentTradingPartner.Name;
+                        }
+                        else if (Local2.ParentTradingPartner != null)
+                        {
+                            TempRow["Bodega"] = Local2.ParentTradingPartner.Name;
+                        }
+                        else
+                        {
+                            TempRow["Bodega"] = Local2.Name;
+                        }
+
+                        TempRow["Bodega"] = Local2.ParentBranchOrLaydown.FormattedName;
+
+                        
+
+
+
+
+                        TempRow["List en Arriendo"] = SumaListOnRent.ToString();
                         TempRow["Total Cost"] = SumaTotalCost.ToString();
                         TempRow["Weight En Arriendo"] = SumaWeight.ToString();
 
 
                         //Antes de cerrar hay que poner la suma 
-
-
-
-
 
 
                         if (StrCliente == "ASA CUATRO SPA")
@@ -211,17 +291,25 @@ namespace Quantify.API
                             //antes de peder la suma de abajo tendrmeos uqe 
                             //Guardar los totales anteirores
 
+                           
+
                             DataRow TempRowTotal = tableProducts.NewRow();
                             TempRowTotal["Cliente"] = StrClientLoop + " Total ";
                             TempRowTotal["Name"] = "";
                             TempRowTotal["Number"] = "";
+                            
+
 
                             TempRowTotal["Administrador de Proyecto"] = "";
                             TempRowTotal["Total Cost"] = Total_SumaTotalCost;
+                            TempRowTotal["List en Arriendo"] = Total_SumaListOnRent;
                             TempRowTotal["Weight En Arriendo"] = Total_SumaWeight;
                             //commit s tabla Salida
                             if (IntConta > 1)
                             {
+                                String BrachName = "";
+                                BrachName = tableProducts.Rows[tableProducts.Rows.Count - 1]["Bodega"].ToString();
+                                TempRowTotal["Bodega"] = BrachName;
                                 tableProducts.Rows.Add(TempRowTotal);
                             }
                            
@@ -235,6 +323,7 @@ namespace Quantify.API
                         else {
                             Total_SumaTotalCost = Total_SumaTotalCost + SumaTotalCost;
                             Total_SumaWeight = Total_SumaWeight + SumaWeight;
+                            Total_SumaListOnRent = Total_SumaListOnRent + SumaListOnRent;
 
                         }
 
@@ -275,6 +364,7 @@ namespace Quantify.API
                     TempRowTotalF["Administrador de Proyecto"] = "0";
                     TempRowTotalF["Total Cost"] = "0";
                     TempRowTotalF["Weight En Arriendo"] = "0";
+                    
                     //commit s tabla Salida
                     tableProducts.Rows.Add(TempRowTotalF);
 
@@ -383,6 +473,7 @@ namespace Quantify.API
             return StrSalida; 
         }
 
+        //Reporte 1
         public string GetProductoReport(String StrCodPais, String StrUser, String Strpass)
         {
             String StrSalida = "";
@@ -415,6 +506,10 @@ namespace Quantify.API
                     DataTable locations = orgData.Tables[0];
 
                     List<Guid> LocationList = new List<Guid>();
+
+
+                    List<Guid> LocationList2 = new List<Guid>();
+
 
 
                     string StrPivotGuid;
@@ -483,8 +578,8 @@ namespace Quantify.API
                        DataColumn ColComprar = new DataColumn("$ Comprar", typeof(float));	
                        DataColumn ColSobra = new DataColumn("$ Sobra", typeof(float)); 	
                        DataColumn ColVender = new DataColumn("$ Vender", typeof(float));
-
-                    
+                       DataColumn ColBodega = new DataColumn("Bodega", typeof(String));
+                       DataColumn ColIdBdega = new DataColumn("IdBodega", typeof(String));
 
 
 
@@ -504,7 +599,7 @@ namespace Quantify.API
                     tableProducts.Columns.Add(colQuantityReserved);
                     tableProducts.Columns.Add(colQuantityInTransit);
                     tableProducts.Columns.Add(colQuantityNew);
-
+                   
 
 
                     //Formulas 
@@ -528,16 +623,147 @@ namespace Quantify.API
                     tableProducts.Columns.Add(ColVender);
 
 
+                    //
+                    tableProducts.Columns.Add(ColBodega);
+                    tableProducts.Columns.Add(ColIdBdega);
+
+
 
                     //Render
                     dataSetProducts.Tables.Add(tableProducts);
+
+                    /* Carga StokigLOcation para FIltrar Bodegas mas adelante */
+                    List<TreeNode> listOfNodes = new List<TreeNode>();
+                    List<TreeNode> listOfNod = new List<TreeNode>();
+                    // System.Web.UI.WebControls.TreeView tvOrganization = new System.Web.UI.WebControls.TreeView();
+                    System.Windows.Forms.TreeView tvOrganizationTop = new System.Windows.Forms.TreeView();
+
+                    StockingLocationOrganization orgTree1 = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
+                    orgTree1.BuildTreeView(tvOrganizationTop, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.PrimaryTradingPartnerID);
+
+
+                    flattenTreeView(tvOrganizationTop.Nodes[0], listOfNodes);
+           
+
+                    // Using LINQ to filter for job sites
+                    listOfNodes = listOfNodes.Where(x => (x.Tag as NodeTag).Type == PartnerTypes.JobSite).ToList();
+                    //listOfNod = listOfNod.Where(x => (x.Tag as NodeTag).StockingLocationID.ToString() == prod.OwnerTradingPartnerID.ToString()).ToList();
+
+                    //crear tabla y sumar datos
+
+                    DataTable tblLocations = new DataTable();
+                    tblLocations.TableName = "tblLocations";
+
+                    //DataColumn idColumn = new DataColumn("id", typeof(string));
+                    DataColumn LocJobSit = new DataColumn("JobSite", typeof(string));
+                    DataColumn LocTradName = new DataColumn("TradingPartnerName", typeof(string));
+                    DataColumn LocTradID = new DataColumn("StrTradinPartnerID", typeof(string));
+                    DataColumn LocTpart = new DataColumn("StrTradinPartner", typeof(string));
+                    tblLocations.Columns.Add(LocJobSit);
+                    tblLocations.Columns.Add(LocTradName);
+                    tblLocations.Columns.Add(LocTradID);
+                    tblLocations.Columns.Add(LocTpart);
+
+
+                       
+                    foreach (TreeNode node in listOfNodes)
+                    {
+                        //es diferente structura para cada pais asi que switch
+                        String[] jobSitePathSplit;
+                        DataRow Drow;
+
+
+                        switch (StrCodPais)
+                        {
+                            case "usa":
+                                jobSitePathSplit = node.FullPath.Split('\\');
+                                Drow = tblLocations.NewRow();
+                                Drow["JobSite"] = jobSitePathSplit.Last();
+                                Drow["TradingPartnerName"] = jobSitePathSplit[3].ToString();
+                                Drow["StrTradinPartnerID"] = jobSitePathSplit[1].ToString();
+                                Drow["StrTradinPartner"] = jobSitePathSplit[2].ToString();
+
+                                tblLocations.Rows.Add(Drow);
+
+                                break;
+
+                            case "co":
+                                jobSitePathSplit = node.FullPath.Split('\\');
+                                Drow = tblLocations.NewRow();
+                                Drow["JobSite"] = jobSitePathSplit.Last();
+                                Drow["TradingPartnerName"] = jobSitePathSplit[2].ToString();
+                                Drow["StrTradinPartnerID"] = jobSitePathSplit[1].ToString();
+                                Drow["StrTradinPartner"] = jobSitePathSplit[0].ToString();
+
+                                tblLocations.Rows.Add(Drow);
+
+                                break;
+
+                            case "cl":
+                                jobSitePathSplit = node.FullPath.Split('\\');
+                                Drow = tblLocations.NewRow();
+                                Drow["JobSite"] = jobSitePathSplit.First();
+                                Drow["TradingPartnerName"] = jobSitePathSplit[2].ToString();
+                                Drow["StrTradinPartnerID"] = jobSitePathSplit[0].ToString();
+                                Drow["StrTradinPartner"] = jobSitePathSplit[1].ToString();
+
+                                tblLocations.Rows.Add(Drow);
+                                break;
+
+                            case "pe":
+                                jobSitePathSplit = node.FullPath.Split('\\');
+                                Drow = tblLocations.NewRow();
+                                Drow["JobSite"] = jobSitePathSplit.Last();
+                                Drow["TradingPartnerName"] = jobSitePathSplit[2].ToString();
+                                Drow["StrTradinPartnerID"] = jobSitePathSplit[0].ToString();
+                                Drow["StrTradinPartner"] = jobSitePathSplit[1].ToString();
+
+                                tblLocations.Rows.Add(Drow);
+                                break;
+
+                            case "pa":
+                                jobSitePathSplit = node.FullPath.Split('\\');
+                                Drow = tblLocations.NewRow();
+                                Drow["JobSite"] = jobSitePathSplit.First();
+                                Drow["TradingPartnerName"] = jobSitePathSplit[2].ToString();
+                                Drow["StrTradinPartnerID"] = jobSitePathSplit[0].ToString();
+                                Drow["StrTradinPartner"] = jobSitePathSplit[1].ToString();
+
+                                tblLocations.Rows.Add(Drow);
+                                break;
+
+                            case "mx":
+                                 jobSitePathSplit = node.FullPath.Split('\\');
+                                 Drow = tblLocations.NewRow();
+                                 Drow["JobSite"] = jobSitePathSplit.Last();
+                                 Drow["TradingPartnerName"] = jobSitePathSplit[2].ToString();
+                                 Drow["StrTradinPartnerID"] = jobSitePathSplit[0].ToString();
+                                 Drow["StrTradinPartner"] = jobSitePathSplit[1].ToString();
+
+                                tblLocations.Rows.Add(Drow);
+                                break;
+
+                        }
+           
+
+
+                    }
+                  
+
+
+
 
 
                     int cont = 2; 
                     foreach (StockedProductListItem prod in ProdList)
                     {
+                        StockingLocation Local2 = StockingLocation.GetStockingLocation(Guid.Parse(prod.StockingLocationID.ToString()), true, true);
 
                         Product Prodname = Product.GetProduct(new Guid(prod.BaseProductID.ToString()));
+
+                       // StockingLocation slo = StockingLocation.GetStockingLocation(prod.StockingLocationID.ToString());
+                       
+                       
 
 
                         String StrPartNumbert = (prod.PartNumber != null) ? prod.PartNumber.ToString() : "NoPartNumber";
@@ -550,13 +776,109 @@ namespace Quantify.API
                         String StrQuantityReserved = (prod.QuantityReserved != null) ? prod.QuantityReserved.ToString() : "0";
                         String StrQuantityInTransit = (prod.QuantityInTransit != null) ? prod.QuantityInTransit.ToString() : "0";
                         String StrQuantityNew = (prod.QuantityNew != null) ? prod.QuantityNew.ToString() : "0";
+                        String StrTradinPartner =  (Local2.ParentStockingLocation != null) ? Local2.ParentStockingLocation.Name.ToString() : "No Corporate";
+                        String StrTradinPartnerID =  (Local2.ParentStockingLocation != null) ? Local2.ParentStockingLocation.StockingLocationID.ToString() : "No Corporate";
 
 
-                        if (prod.QuantityForRent == null)
+                        //TradingPartner trad = TradingPartner.GetTradingPartner(Guid.Parse(slo.TradingPartnerID.ToString()));
+
+                        //
+
+                        // System.Web.UI.WebControls.TreeView tvOrganization = new System.Web.UI.WebControls.TreeView();
+                       // System.Windows.Forms.TreeView tvOrganization = new System.Windows.Forms.TreeView();
+
+                        //StockingLocationOrganization orgTree = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
+                        //orgTree.BuildTreeView(tvOrganization, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.PrimaryTradingPartnerID);
+
+                        List<Guid> lguid = new List<Guid>();
+
+                        //lguid = orgTree.GetStockingLocationIDList();
+
+                        //orgTree.BuildTreeView(tvOrganization2, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.UserID);
+
+
+                        //System.Windows.Forms.TreeNode oMainNode = tvOrganization.Nodes[0];
+
+                        //System.Windows.Forms.TreeNode oMainNode2 = tvOrganization2.Nodes[1];
+                        /* intervension por bodegas */
+
+
+
+
+                        // if (prod.PartNumber == "ANBC-0011")
+                        if (true)
                         {
                             //Validacion para saltar lo que no tienen Reserva 
-                            //continue;
+                            string nose = "";
+                            nose = prod.StockingLocationID.ToString();
+                            //nose = slo.ParentTradingPartner.Name;
+                            string _sqlWhere;
+                            if (Local2.ParentStockingLocation == null)
+                            {
+                                 _sqlWhere = "TradingPartnerName = '" + prod.TradingPartnerName + "'";
+                            }
+                            else
+                            {
+                                 _sqlWhere = "TradingPartnerName = '" + Local2.ParentStockingLocation.Name + "'";
+                            }
+                            //bodegas
+
+                          
+                            DataTable _newDataTable = new DataTable();
+                            //_newDataTable = tblLocations.Select(_sqlWhere).CopyToDataTable();
+
+                            DataRow[] filteredRows = tblLocations.Select(_sqlWhere);
+
+
+                            if (filteredRows.Length > 0)
+                            {
+
+                                //otro switch
+                                switch (StrCodPais)
+                                {
+                                    case "usa":
+                                        StrTradinPartner = filteredRows[0].ItemArray[3].ToString();
+                                        StrTradinPartnerID = filteredRows[0].ItemArray[3].ToString();
+                                        break;
+                                    case "co":
+                                        StrTradinPartner = filteredRows[0].ItemArray[2].ToString();
+                                        StrTradinPartnerID = filteredRows[0].ItemArray[2].ToString();
+                                        break;
+                                    case "cl":
+                                        StrTradinPartner = filteredRows[0].ItemArray[3].ToString();
+                                        StrTradinPartnerID = filteredRows[0].ItemArray[3].ToString();
+                                        break;
+                                    case "pe":
+                                        StrTradinPartner = filteredRows[0].ItemArray[3].ToString();
+                                        StrTradinPartnerID = filteredRows[0].ItemArray[3].ToString();
+                                        break;
+                                    case "pa":
+                                        StrTradinPartner = filteredRows[0].ItemArray[3].ToString();
+                                        StrTradinPartnerID = filteredRows[0].ItemArray[3].ToString();
+                                        break;
+                                    case "mx":
+                                        StrTradinPartner = filteredRows[0].ItemArray[3].ToString();
+                                        StrTradinPartnerID = filteredRows[0].ItemArray[3].ToString();
+                                        break;
+                                   
+                                }
+                                
+                            }
+
+                            if (StrTradinPartner == "No Corporate")
+                            {
+                                StrTradinPartner = prod.TradingPartnerName; 
+
+
+                            }
+
+
+
+
                         }
+
+                      
+                        //
 
 
                         DataRow TempRow = tableProducts.NewRow();
@@ -591,6 +913,11 @@ namespace Quantify.API
                         TempRow["$ Comprar"] = 0;
                         TempRow["$ Sobra"] = 0;
                         TempRow["$ Vender"] = 0;
+
+                        TempRow["Bodega"] = StrTradinPartner;
+                        TempRow["IdBodega"] = StrTradinPartnerID;
+
+
                         /*
                          $ En Bodega	$ Total	$ Porcentaje	$ Kg Unit	$ Kg en renta	$ Kg en bodega	$ Kg total	$ m2 Unit	$ m2 en Renta	$ m2 en bodega	$ M2 total 	$ Total U 	0,70	$ Falta 	$ Comprar	$ Sobra 	$ Vender
 
@@ -2371,12 +2698,48 @@ string sortExp = "City";
 
                     // System.Web.UI.WebControls.TreeView tvOrganization = new System.Web.UI.WebControls.TreeView();
                     System.Windows.Forms.TreeView tvOrganization = new System.Windows.Forms.TreeView();
+                    System.Windows.Forms.TreeView tvOrganization2 = new System.Windows.Forms.TreeView();
+
 
                     StockingLocationOrganization orgTree = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
                     orgTree.BuildTreeView(tvOrganization, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.PrimaryTradingPartnerID);
 
+                    List<Guid> lguid = new List<Guid>();
+
+                    lguid =  orgTree.GetStockingLocationIDList();
+                    
+                     //orgTree.BuildTreeView(tvOrganization2, OrgViewGrouping.ByJob, JobTreeNodeDisplayType.Name, AvUser.RelatedID, AvUser.UserID, AvUser.UserID);
+
+
                     System.Windows.Forms.TreeNode oMainNode = tvOrganization.Nodes[0];
-                   // System.Windows.Forms.TreeNode oMainNode2 = tvOrganization.Nodes[1];
+
+                    //System.Windows.Forms.TreeNode oMainNode2 = tvOrganization2.Nodes[1];
+                    /* intervension por bodegas */
+
+         
+                    List<TreeNode> listOfNodes = new List<TreeNode>();
+
+                    flattenTreeView(tvOrganization.Nodes[0], listOfNodes);
+                    // Using LINQ to filter for job sites
+                    listOfNodes = listOfNodes.Where(x => (x.Tag as NodeTag).Type == PartnerTypes.JobSite).ToList();
+
+                    foreach (TreeNode node in listOfNodes)
+                    {
+                        String StrCorporate;
+                        String[] jobSitePathSplit = node.FullPath.Split('\\');
+                        //Console.WriteLine(node.FullPath);
+                        Console.Write(jobSitePathSplit[1] + '\t'); //print corporate structure
+                        Console.WriteLine(jobSitePathSplit.Last()); // print jobsite
+
+                        StrCorporate = jobSitePathSplit[1].ToString();
+
+                    }
+
+                    /* intervencion por bodegas */
+
+
+
+
 
 
 

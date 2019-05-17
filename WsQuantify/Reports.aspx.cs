@@ -8,8 +8,7 @@ using Newtonsoft.Json;
 using ClosedXML.Excel;
 using System.IO;
 using System.Data;
-
-
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace WsQuantify
 {
@@ -986,410 +985,165 @@ namespace WsQuantify
         {
 
 
+            //si es pe o usa tendra otroa tratamiento 2 hojas excel 
+            String StrCodepais = System.Web.HttpContext.Current.Session["_strpais"] as String;
+
             var workbook = new XLWorkbook();
-            var ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
-           
+            var ws = workbook.Worksheets.Add("new");
+            var ws2 = workbook.Worksheets.Add("new2");
+
+            ws.Worksheet.Delete();
+            ws2.Worksheet.Delete();
+
+            DataTable dt1;
+            DataTable dt2;
+            DataTable DtArea = GetDtArea();
 
 
-
-            //formulas por reporte 
-            switch (StrFilename)
+            switch (StrCodepais)
             {
-                case "StockedItemCost_CL.xlsx":
-                    DataTable DtArea = GetDtArea();
-                    var ws2 = workbook.Worksheets.Add(DtArea);
-                    //workbook.Worksheets.Add(DsetReport);
-                    #region  StockedItemCost_CL
-                    int IntColumnas = 0;
-                    int IntFilas = 0;
-
-                    IntColumnas = DsetReport.Tables[0].Columns.Count;
-                    IntFilas = DsetReport.Tables[0].Rows.Count;
-                    IntFilas = IntFilas + 2;
-
-                    //Primera Columna de formula
-                    ws.Cell(1, 11).Value = "$ Renta";
-                    ws.Cell(1, 12).Value = "$ En Bodega";
-
-                    ws.Cell(1, 13).Value = "$ Total";
-                    ws.Cell(1, 14).Value = "$ Porcentaje";
-
-                    ws.Cell(1, 15).Value = "$ Kg Unit";
-                    ws.Cell(1, 16).Value = "$ Kg en renta";
-                    ws.Cell(1, 17).Value = "$ Kg en bodega";
-
-                    ws.Cell(1, 18).Value = "$ Kg total";
-
-                    ws.Cell(1, 19).Value = "$ m2 Unit";
-                    ws.Cell(1, 20).Value = "$ m2 en Renta";
-
-                    ws.Cell(1, 21).Value = "$ m2 en bodega";
-                    ws.Cell(1, 22).Value = "$ M2 total ";
-                    ws.Cell(1, 23).Value = "$ Total U ";
-
-                    ws.Cell(1, 24).Value = "0,7";
-                    ws.Cell(1, 24).Style.NumberFormat.NumberFormatId = 2;
-
-                    ws.Cell(1, 25).Value = "$ Falta ";
-                    ws.Cell(1, 26).Value = "$ Comprar";
-                    ws.Cell(1, 27).Value = "$ Sobra ";
-                    ws.Cell(1, 28).Value = "$ Vender";
-
-
-
-                    for (int i = 2; i < IntFilas; i++)
+                case "usa":
+                    switch (StrFilename)
                     {
-                        var cellWithFormulaA1 = ws.Cell(i, 11);
-                        string Formula = "=F" + i.ToString() + "*E" + i.ToString() + "";
-                        cellWithFormulaA1.FormulaA1 = Formula;
-                        cellWithFormulaA1.Style.NumberFormat.NumberFormatId = 3;
+                        case "StockedItemCost_CL.xlsx":
 
-                        var cellWithFormula12 = ws.Cell(i, 12);
-                        Formula = "=(G" + i.ToString() + " + I" + i.ToString() + " + H" + i.ToString() + " + J" + i.ToString() + ") *$E" + i.ToString() + "";
-                        cellWithFormula12.FormulaA1 = Formula;
-                        cellWithFormula12.Style.NumberFormat.NumberFormatId = 3;
+                            //agregar una hoga x bodega 
 
+                            //subtables de consulta 
+                            //DataView dvBod1 = new DataView(DsetReport.Tables[0]);
+                            //dvBod1.RowFilter = "Bodega = 'Unispan OHIO'"; // query example = "id = 10"
 
-                        var cellWithFormula13 = ws.Cell(i, 13);
-                        Formula = "=K" + i.ToString() + "+L" + i.ToString() + "";
-                        cellWithFormula13.FormulaA1 = Formula;
-                        cellWithFormula13.Style.NumberFormat.NumberFormatId = 3;
-
-                        var cellWithFormula14 = ws.Cell(i, 14);
-                        Formula = "=IF(M" + i.ToString() + "=0,0,K" + i.ToString() + "/M" + i.ToString() + ")"; //  "IFERROR(K" + i.ToString() + "/M" + i.ToString() + ";0)";
-                        cellWithFormula14.FormulaA1 = Formula;
-                        cellWithFormula14.Style.NumberFormat.NumberFormatId = 9;
-
-                        var cellWithFormula15 = ws.Cell(i, 15);
-                        Formula = "=+D" + i.ToString();
-                        cellWithFormula15.FormulaA1 = Formula;
-                        cellWithFormula15.Style.NumberFormat.NumberFormatId = 3;
-
-                        var cellWithFormula16 = ws.Cell(i, 16);
-                        Formula = "=+O" + i.ToString() + "*F" + i.ToString();
-                        cellWithFormula16.FormulaA1 = Formula;
-                        cellWithFormula16.Style.NumberFormat.NumberFormatId = 3;
-
-                        var cellWithFormula17 = ws.Cell(i, 17);
-                        Formula = "=+O" + i.ToString() + "*(G" + i.ToString() + "+H" + i.ToString() + "+I" + i.ToString() + "+J" + i.ToString() + ")";
-                        cellWithFormula17.FormulaA1 = Formula;
-                        cellWithFormula17.Style.NumberFormat.NumberFormatId = 3;
-
-                        var cellWithFormula18 = ws.Cell(i, 18);
-                        Formula = "=+Q" + i.ToString() + "+P" + i.ToString() + "";
-                        cellWithFormula18.FormulaA1 = Formula;
-                        cellWithFormula18.Style.NumberFormat.NumberFormatId = 3;
-
-                        var cellWithFormula19 = ws.Cell(i, 19);
-                        Formula = "";
+                            dt1 = DsetReport.Tables[0].Select("Bodega = 'Unispan USA OHIO'").CopyToDataTable();
+                            dt1.TableName = "Unispan USA OHIO";
+                            dt2 = DsetReport.Tables[0].Select("Bodega = 'Unispan USA Florida'").CopyToDataTable();
+                            dt2.TableName = "Unspan USA Florida";
+                            ws = workbook.Worksheets.Add(dt1);
+                            ws2 = workbook.Worksheets.Add(dt2);
 
 
+                            var ws_area = workbook.Worksheets.Add(DtArea);
+
+                            FormamatWs_StockedItemCost(ref ws, dt1, DtArea);
+                            FormamatWs_StockedItemCost(ref ws2, dt2, DtArea);
+
+                            // ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
+
+                            break;
+
+                        case "StockedItemCostCostumer_CL.xlsx":
+                            //DataTable DtArea2 = GetDtArea();
+
+                            dt1 = DsetReport.Tables[0].Select("Bodega = 'Unispan USA OHIO'").CopyToDataTable();
+                            dt1.TableName = "Unispan USA OHIO";
+                            dt2 = DsetReport.Tables[0].Select("Bodega = 'Unispan USA Florida'").CopyToDataTable();
+                            dt2.TableName = "Unispan USA Florida";
+                            ws = workbook.Worksheets.Add(dt1);
+                            ws2 = workbook.Worksheets.Add(dt2);
+
+                            //ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
+                            FormamatWs_StockedItemCostCostumer_CL(ref ws, dt1);
+                            FormamatWs_StockedItemCostCostumer_CL(ref ws2, dt2);
+                            break;
+                    }
 
 
-                        // "=BUSCARV(A3;area!A$2:F$1000;6;FALSO)";
-                        //cellWithFormula19.FormulaA1 = Formula;
-                        //cellWithFormula19.Style.NumberFormat.NumberFormatId = 3;
+                break;
 
-                        double dblM2 = 0;
+                case "co":
+                    switch (StrFilename)
+                    {
+                        case "StockedItemCost_CL.xlsx":
 
-                        string StrQuery = "";
-                        string Strcodigo = "";
-                        var TempCel = ws.Cell(i, 1);
-                        Strcodigo = TempCel.Value.ToString().Replace("'", "");
-                        StrQuery = "Codigo = '" + Strcodigo + "'";
-                        DataRow[] result = DtArea.Select(StrQuery);
-                        if (result.Length > 0)
-                        {
+                            //agregar una hoga x bodega 
 
-                            double.TryParse(result[0].ItemArray[4].ToString(), out dblM2);
+                            //subtables de consulta 
+                            //DataView dvBod1 = new DataView(DsetReport.Tables[0]);
+                            //dvBod1.RowFilter = "Bodega = 'Unispan OHIO'"; // query example = "id = 10"
 
-                            if (dblM2 > 0)
+                            if (DsetReport.Tables[0].Select("Bodega = 'Planta Bogota'").Length > 0)
                             {
-                                cellWithFormula19.Value = dblM2;
+                                dt1 = DsetReport.Tables[0].Select("Bodega = 'Planta Bogota'").CopyToDataTable();
+                                dt1.TableName = "Planta Bogota";
+                                ws = workbook.Worksheets.Add(dt1);
+                                FormamatWs_StockedItemCost(ref ws, dt1, DtArea);
+
                             }
 
-                        }
+                            if (DsetReport.Tables[0].Select("Bodega = 'Planta Palmira'").Length > 0)
+                            {
+                                dt2 = DsetReport.Tables[0].Select("Bodega = 'Planta Palmira'").CopyToDataTable();
+                                dt2.TableName = "Planta Palmira";
+                                ws2 = workbook.Worksheets.Add(dt2);
+                                var ws_area = workbook.Worksheets.Add(DtArea);
+                                FormamatWs_StockedItemCost(ref ws2, dt2, DtArea);
 
 
-                        cellWithFormula19.SetDataType(XLDataType.Number);
-                        cellWithFormula19.Style.NumberFormat.NumberFormatId = 4;
-
-                        //Esto fue el reemplazo del buscarV 
+                            }
 
 
 
-                        var cellWithFormula20 = ws.Cell(i, 20);
-                        Formula = "=+S" + i.ToString() + "*F" + i.ToString() + "";
-                        cellWithFormula20.FormulaA1 = Formula;
-                        cellWithFormula20.Style.NumberFormat.NumberFormatId = 3;
+                            // ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
 
-                        var cellWithFormula21 = ws.Cell(i, 21);
-                        Formula = "=+S" + i.ToString() + "*(G" + i.ToString() + "+H" + i.ToString() + "+I" + i.ToString() + "+J" + i.ToString() + ")";
-                        cellWithFormula21.FormulaA1 = Formula;
-                        cellWithFormula21.Style.NumberFormat.NumberFormatId = 3;
+                            break;
 
-                        var cellWithFormula22 = ws.Cell(i, 22);
-                        Formula = "=+U" + i.ToString() + "+T" + i.ToString() + "";
-                        cellWithFormula22.FormulaA1 = Formula;
-                        cellWithFormula22.Style.NumberFormat.NumberFormatId = 3;
+                        case "StockedItemCostCostumer_CL.xlsx":
+                            //DataTable DtArea2 = GetDtArea();
 
+                            if (DsetReport.Tables[0].Select("Bodega = 'Planta Bogota'").Length > 0)
+                            {
+                                dt1 = DsetReport.Tables[0].Select("Bodega = 'Planta Bogota'").CopyToDataTable();
+                                dt1.TableName = "Planta Bogota";
+                                ws = workbook.Worksheets.Add(dt1);
+                                FormamatWs_StockedItemCostCostumer_CL(ref ws, dt1);
 
-                        var cellWithFormula23 = ws.Cell(i, 23);
-                        Formula = "=+F" + i.ToString() + "+G" + i.ToString() + "+H" + i.ToString() + "+I" + i.ToString() + "+J" + i.ToString() + "";
-                        cellWithFormula23.FormulaA1 = Formula;
-                        cellWithFormula23.Style.NumberFormat.NumberFormatId = 3;
+                            }
 
-
-                        var cellWithFormula24 = ws.Cell(i, 24);
-                        Formula = "=INT(F" + i.ToString() + "/X$1)*(1)";
-                        cellWithFormula24.FormulaA1 = Formula;
-                        cellWithFormula24.Style.NumberFormat.NumberFormatId = 3;
+                            if (DsetReport.Tables[0].Select("Bodega = 'Planta Palmira'").Length > 0)
+                            {
+                                dt2 = DsetReport.Tables[0].Select("Bodega = 'Planta Palmira'").CopyToDataTable();
+                                dt2.TableName = "Planta Palmira";
+                                ws2 = workbook.Worksheets.Add(dt2);
+                                var ws_area = workbook.Worksheets.Add(DtArea);
+                                FormamatWs_StockedItemCostCostumer_CL(ref ws2, dt2);
 
 
-                        var cellWithFormula25 = ws.Cell(i, 25);
-                        Formula = "=IF(+X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ">0,X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ",0)";
-
-                        //Formula = "=IF(+X4-F4-G4-H4-I4-J4>0,X4-F4-G4-H4-I4-J4,0)";
-
-                        cellWithFormula25.FormulaA1 = Formula;
-                        cellWithFormula25.Style.NumberFormat.NumberFormatId = 3;
-
-                        var cellWithFormula26 = ws.Cell(i, 26);
-                        Formula = "=Y" + i.ToString() + "*E" + i.ToString() + "";
-                        cellWithFormula26.FormulaA1 = Formula;
-                        cellWithFormula26.Style.NumberFormat.NumberFormatId = 3;
+                            }
 
 
-                        var cellWithFormula27 = ws.Cell(i, 27);
-                        Formula = "=IF(X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + "<0,-(X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + "),0)";
-                        cellWithFormula27.FormulaA1 = Formula;
-                        cellWithFormula27.Style.NumberFormat.NumberFormatId = 3;
+                            break;
+                    }
+
+                    break;
 
 
-                        var cellWithFormula28 = ws.Cell(i, 28);
-                        Formula = "=+AA" + i.ToString() + "*E" + i.ToString() + "";
-                        cellWithFormula28.FormulaA1 = Formula;
-                        cellWithFormula28.Style.NumberFormat.NumberFormatId = 3;
+                default:
 
+                    //swichera para reporte 
 
-                        if (i == (IntFilas - 1))
-                        {
-                            int FinalData = IntFilas - 1;
-                            int PosFormula = IntFilas;
-                            var cellWithFormula_1 = ws.Cell(PosFormula, 6);
+                    switch (StrFilename)
+                    {
+                        case "StockedItemCost_CL.xlsx":                         
+                            ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
+                            FormamatWs_StockedItemCost(ref ws, DsetReport.Tables[0], DtArea);
+                        break;
+
+                        case "StockedItemCostCostumer_CL.xlsx":
+                            //DataTable DtArea2 = GetDtArea();
+                            ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
+                            FormamatWs_StockedItemCostCostumer_CL(ref ws, DsetReport.Tables[0]);
+                         break;
 
 
 
 
-                            Formula = "=SUBTOTAL(9,D2:D" + FinalData.ToString() + ")";
-               
+                    }
+
                            
-                            ws.Cell(PosFormula, 4).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 4).Style.NumberFormat.NumberFormatId = 3;
-
-
-                            Formula = "=SUBTOTAL(9,E2:E" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula,5).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 5).Style.NumberFormat.NumberFormatId = 3;
-
-
-
-                            Formula = "=SUBTOTAL(9,F2:F" + FinalData.ToString() + ")";
-                        
-                            ws.Cell(PosFormula, 6).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 6).Style.NumberFormat.NumberFormatId = 3;
-
-
-
-                            // Formula = "=SUM(G2:G" + FinalData.ToString() + ")";
-                            Formula = "=SUBTOTAL(9,G2:G" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 7).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 7).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,H2:H" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 8).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 8).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,I2:I" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 9).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 9).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,J2:J" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 10).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 10).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,K2:K" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 11).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 11).Style.NumberFormat.NumberFormatId = 3;
-
-
-                            Formula = "=SUBTOTAL(9,L2:L" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 12).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 12).Style.NumberFormat.NumberFormatId = 3;
-
-
-                            Formula = "=SUBTOTAL(9,M2:M" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 13).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 13).Style.NumberFormat.NumberFormatId = 3;
-
-                            //Formula qUENO SUMA 
-                            Formula = "=IF(M" + PosFormula.ToString() + "=0,0,K" + PosFormula.ToString() + "/M" + PosFormula.ToString() + ")";
-                            //=SI.ERROR(K800/M800;0)
-                            ws.Cell(PosFormula, 14).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 14).Style.NumberFormat.NumberFormatId = 9;
-
-                            Formula = "=SUBTOTAL(9,O2:O" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 15).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 15).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,P2:P" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 16).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 16).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,Q2:Q" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 17).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 17).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,R2:R" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 18).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 18).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,S2:S" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 19).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 19).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,T2:T" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 20).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 20).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,U2:U" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 21).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 21).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,V2:V" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 22).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 22).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,W2:W" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 23).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 23).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,X2:X" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 24).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 24).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,Y2:Y" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 25).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 25).Style.NumberFormat.NumberFormatId = 3;
-
-                            Formula = "=SUBTOTAL(9,Z2:Z" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 26).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 26).Style.NumberFormat.NumberFormatId = 3;
-
-
-                            Formula = "=SUBTOTAL(9,AA2:AA" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 27).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 27).Style.NumberFormat.NumberFormatId = 3;
-
-
-                            Formula = "=SUBTOTAL(9,AB2:AB" + FinalData.ToString() + ")";
-                            ws.Cell(PosFormula, 28).FormulaA1 = Formula;
-                            ws.Cell(PosFormula, 28).Style.NumberFormat.NumberFormatId = 3;
-
-
-
-
-
-
-
-
-                        }
-                    }
-
-
-                    //formateo de las 28 col
-                    int cols = 28;
-                    for (int i = 1; i <= cols; i++)
-                    {
-                        /*
-                        $ En Bodega	$ Total	$ Porcentaje	$ Kg Unit	$ Kg en renta	$ Kg en bodega	$ Kg total	$ m2 Unit	$ m2 en Renta	$ m2 en bodega	$ M2 total 	$ Total U 	0,70	$ Falta 	$ Comprar	$ Sobra 	$ Vender
-                        */
-                        ws.Column(i).AdjustToContents();
-
-                        //Totales 
-                        // var cellWithFormula27 = ws.Cell(i,IntFilas+1);
-                    }
-
-                    string tmpForm = "";
-                    var cellWithFormula = ws.Cell(6, 777);
-
-
-                    //poner titulo al reporte
-                    ws.Row(1).InsertRowsAbove(1);
-                    ws.Cell(1, 1).Value = DateTime.Now.ToShortDateString();
-
-          
-
-
-
-
-
-
-                    #endregion
-                    break;
-
-                case "StockedItemCostCostumer_CL.xlsx":
-                    #region StockedItemCost_CL
-
-
-                    int intLargoTabla = 0;
-                    intLargoTabla = DsetReport.Tables[0].Rows.Count;
-
-                    for (int i = 2; i < intLargoTabla; i++)
-                    {
-                        var cellWithFormula20 = ws.Cell(i, 5);
-                        cellWithFormula20.SetDataType(XLDataType.Number);
-                        cellWithFormula20.Style.NumberFormat.NumberFormatId = 4;
-
-                
-
-
-                        var cellWithFormula21 = ws.Cell(i, 6);
-                        cellWithFormula21.SetDataType(XLDataType.Number);
-                        cellWithFormula21.Style.NumberFormat.NumberFormatId = 4;
-                    }
-
-
-                    //poner titulo al reporte
-                    ws.Row(1).InsertRowsAbove(1);
-                    ws.Cell(1, 1).Value = DateTime.Now.ToShortDateString();
-
-
-
-                    //formateo de las 28 col
-                    int cols2 = 7;
-                    for (int i = 1; i <= cols2; i++)
-                    {
-                        /*
-                        $ En Bodega	$ Total	$ Porcentaje	$ Kg Unit	$ Kg en renta	$ Kg en bodega	$ Kg total	$ m2 Unit	$ m2 en Renta	$ m2 en bodega	$ M2 total 	$ Total U 	0,70	$ Falta 	$ Comprar	$ Sobra 	$ Vender
-                        */
-                        ws.Column(i).AdjustToContents();
-
-                        //Totales 
-                        // var cellWithFormula27 = ws.Cell(i,IntFilas+1);
-                    }
-
-
-
-                    #endregion
-
 
                     break;
-
-
             }
 
-            //CAmbiarNombre Archivo por pais 
+          
 
             string strreplacefor = System.Web.HttpContext.Current.Session["_strpais"] as String;
 
@@ -1417,6 +1171,446 @@ namespace WsQuantify
 
         }
 
+
+        protected void FormamatWs_StockedItemCostCostumer_CL(ref IXLWorksheet ws, DataTable Ladata)
+        {
+
+            #region StockedItemCost_CL
+
+
+            int intLargoTabla = 0;
+            intLargoTabla = Ladata.Rows.Count;
+
+            for (int i = 2; i < intLargoTabla; i++)
+            {
+                var cellWithFormula20 = ws.Cell(i, 5);
+                cellWithFormula20.SetDataType(XLDataType.Number);
+                cellWithFormula20.Style.NumberFormat.NumberFormatId = 4;
+
+
+
+
+                var cellWithFormula21 = ws.Cell(i, 6);
+                cellWithFormula21.SetDataType(XLDataType.Number);
+                cellWithFormula21.Style.NumberFormat.NumberFormatId = 4;
+            }
+
+
+            //poner titulo al reporte
+            ws.Row(1).InsertRowsAbove(1);
+            ws.Cell(1, 1).Value = DateTime.Now.ToShortDateString();
+
+
+
+            //formateo de las 28 col
+            int cols2 = 7;
+            for (int i = 1; i <= cols2; i++)
+            {
+                /*
+                $ En Bodega	$ Total	$ Porcentaje	$ Kg Unit	$ Kg en renta	$ Kg en bodega	$ Kg total	$ m2 Unit	$ m2 en Renta	$ m2 en bodega	$ M2 total 	$ Total U 	0,70	$ Falta 	$ Comprar	$ Sobra 	$ Vender
+                */
+                ws.Column(i).AdjustToContents();
+
+                //Totales 
+                // var cellWithFormula27 = ws.Cell(i,IntFilas+1);
+            }
+
+
+
+            #endregion
+
+        }
+
+        protected void FormamatWs_StockedItemCost(ref IXLWorksheet ws, DataTable Ladata, DataTable DtArea)
+        {
+            #region  StockedItemCost_CL
+            int IntColumnas = 0;
+            int IntFilas = 0;
+
+            IntColumnas = Ladata.Columns.Count;
+            IntFilas = Ladata.Rows.Count;
+            IntFilas = IntFilas + 2;
+
+            //Primera Columna de formula
+            ws.Cell(1, 11).Value = "$ Renta";
+            ws.Cell(1, 12).Value = "$ En Bodega";
+
+            ws.Cell(1, 13).Value = "$ Total";
+            ws.Cell(1, 14).Value = "$ Porcentaje";
+
+            ws.Cell(1, 15).Value = "$ Kg Unit";
+            ws.Cell(1, 16).Value = "$ Kg en renta";
+            ws.Cell(1, 17).Value = "$ Kg en bodega";
+
+            ws.Cell(1, 18).Value = "$ Kg total";
+
+            ws.Cell(1, 19).Value = "$ m2 Unit";
+            ws.Cell(1, 20).Value = "$ m2 en Renta";
+
+            ws.Cell(1, 21).Value = "$ m2 en bodega";
+            ws.Cell(1, 22).Value = "$ M2 total ";
+            ws.Cell(1, 23).Value = "$ Total U ";
+
+            ws.Cell(1, 24).Value = "0,7";
+            ws.Cell(1, 24).Style.NumberFormat.NumberFormatId = 2;
+
+            ws.Cell(1, 25).Value = "$ Falta ";
+            ws.Cell(1, 26).Value = "$ Comprar";
+            ws.Cell(1, 27).Value = "$ Sobra ";
+            ws.Cell(1, 28).Value = "$ Vender";
+
+
+
+            for (int i = 2; i < IntFilas; i++)
+            {
+                var cellWithFormulaA1 = ws.Cell(i, 11);
+                string Formula = "=F" + i.ToString() + "*E" + i.ToString() + "";
+                cellWithFormulaA1.FormulaA1 = Formula;
+                cellWithFormulaA1.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormulaA1.Style.NumberFormat.Format = "$ #,##0";
+
+                var cellWithFormula12 = ws.Cell(i, 12);
+                Formula = "=(G" + i.ToString() + " + I" + i.ToString() + " + H" + i.ToString() + " + J" + i.ToString() + ") *$E" + i.ToString() + "";
+                cellWithFormula12.FormulaA1 = Formula;
+                cellWithFormula12.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula12.Style.NumberFormat.Format = "$ #,##0";
+
+
+                var cellWithFormula13 = ws.Cell(i, 13);
+                Formula = "=K" + i.ToString() + "+L" + i.ToString() + "";
+                cellWithFormula13.FormulaA1 = Formula;
+                cellWithFormula13.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula13.Style.NumberFormat.Format = "$ #,##0";
+             
+
+                
+                var cellWithFormula14 = ws.Cell(i, 14);
+                Formula = "=IF(M" + i.ToString() + "=0,0,K" + i.ToString() + "/M" + i.ToString() + ")"; //  "IFERROR(K" + i.ToString() + "/M" + i.ToString() + ";0)";
+                cellWithFormula14.FormulaA1 = Formula;
+                cellWithFormula14.Style.NumberFormat.NumberFormatId = 9;
+
+                var cellWithFormula15 = ws.Cell(i, 15);
+                Formula = "=+D" + i.ToString();
+                cellWithFormula15.FormulaA1 = Formula;
+                cellWithFormula15.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula15.Style.NumberFormat.Format = "$ #,##0";
+
+                var cellWithFormula16 = ws.Cell(i, 16);
+                Formula = "=+O" + i.ToString() + "*F" + i.ToString();
+                cellWithFormula16.FormulaA1 = Formula;
+                cellWithFormula16.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula16.Style.NumberFormat.Format = "$ #,##0";
+
+                var cellWithFormula17 = ws.Cell(i, 17);
+                Formula = "=+O" + i.ToString() + "*(G" + i.ToString() + "+H" + i.ToString() + "+I" + i.ToString() + "+J" + i.ToString() + ")";
+                cellWithFormula17.FormulaA1 = Formula;
+                cellWithFormula17.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula17.Style.NumberFormat.Format = "$ #,##0";
+
+                var cellWithFormula18 = ws.Cell(i, 18);
+                Formula = "=+Q" + i.ToString() + "+P" + i.ToString() + "";
+                cellWithFormula18.FormulaA1 = Formula;
+                cellWithFormula18.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula18.Style.NumberFormat.Format = "$ #,##0";
+
+                var cellWithFormula19 = ws.Cell(i, 19);
+                Formula = "";
+
+
+
+
+                // "=BUSCARV(A3;area!A$2:F$1000;6;FALSO)";
+                //cellWithFormula19.FormulaA1 = Formula;
+                //cellWithFormula19.Style.NumberFormat.NumberFormatId = 3;
+
+                double dblM2 = 0;
+
+                string StrQuery = "";
+                string Strcodigo = "";
+                var TempCel = ws.Cell(i, 1);
+                Strcodigo = TempCel.Value.ToString().Replace("'", "");
+                StrQuery = "Codigo = '" + Strcodigo + "'";
+                DataRow[] result = DtArea.Select(StrQuery);
+                if (result.Length > 0)
+                {
+
+                    double.TryParse(result[0].ItemArray[4].ToString(), out dblM2);
+
+                    if (dblM2 > 0)
+                    {
+                        cellWithFormula19.Value = dblM2;
+                    }
+
+                }
+
+
+                cellWithFormula19.SetDataType(XLDataType.Number);
+                cellWithFormula19.Style.NumberFormat.NumberFormatId = 4;
+
+                //Esto fue el reemplazo del buscarV 
+
+
+
+                var cellWithFormula20 = ws.Cell(i, 20);
+                Formula = "=+S" + i.ToString() + "*F" + i.ToString() + "";
+                cellWithFormula20.FormulaA1 = Formula;
+                cellWithFormula20.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula20.Style.NumberFormat.Format = "$ #,##0";
+
+                var cellWithFormula21 = ws.Cell(i, 21);
+                Formula = "=+S" + i.ToString() + "*(G" + i.ToString() + "+H" + i.ToString() + "+I" + i.ToString() + "+J" + i.ToString() + ")";
+                cellWithFormula21.FormulaA1 = Formula;
+                cellWithFormula21.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula21.Style.NumberFormat.Format = "$ #,##0";
+
+                var cellWithFormula22 = ws.Cell(i, 22);
+                Formula = "=+U" + i.ToString() + "+T" + i.ToString() + "";
+                cellWithFormula22.FormulaA1 = Formula;
+                cellWithFormula22.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula22.Style.NumberFormat.Format = "$ #,##0";
+
+
+                var cellWithFormula23 = ws.Cell(i, 23);
+                Formula = "=+F" + i.ToString() + "+G" + i.ToString() + "+H" + i.ToString() + "+I" + i.ToString() + "+J" + i.ToString() + "";
+                cellWithFormula23.FormulaA1 = Formula;
+                cellWithFormula23.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula23.Style.NumberFormat.Format = "$ #,##0";
+
+
+                var cellWithFormula24 = ws.Cell(i, 24);
+                Formula = "=INT(F" + i.ToString() + "/X$1)*(1)";
+                cellWithFormula24.FormulaA1 = Formula;
+                cellWithFormula24.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula24.Style.NumberFormat.Format = "$ #,##0";
+
+
+
+                var cellWithFormula25 = ws.Cell(i, 25);
+                Formula = "=IF(+X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ">0,X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + ",0)";
+
+                //Formula = "=IF(+X4-F4-G4-H4-I4-J4>0,X4-F4-G4-H4-I4-J4,0)";
+
+                cellWithFormula25.FormulaA1 = Formula;
+                cellWithFormula25.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula25.Style.NumberFormat.Format = "$ #,##0";
+
+                var cellWithFormula26 = ws.Cell(i, 26);
+                Formula = "=Y" + i.ToString() + "*E" + i.ToString() + "";
+                cellWithFormula26.FormulaA1 = Formula;
+                cellWithFormula26.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula26.Style.NumberFormat.Format = "$ #,##0";
+
+
+                var cellWithFormula27 = ws.Cell(i, 27);
+                Formula = "=IF(X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + "<0,-(X" + i.ToString() + "-F" + i.ToString() + "-G" + i.ToString() + "-H" + i.ToString() + "-I" + i.ToString() + "-J" + i.ToString() + "),0)";
+                cellWithFormula27.FormulaA1 = Formula;
+                cellWithFormula27.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula27.Style.NumberFormat.Format = "$ #,##0";
+
+
+                var cellWithFormula28 = ws.Cell(i, 28);
+                Formula = "=+AA" + i.ToString() + "*E" + i.ToString() + "";
+                cellWithFormula28.FormulaA1 = Formula;
+                cellWithFormula28.Style.NumberFormat.NumberFormatId = 3;
+                cellWithFormula28.Style.NumberFormat.Format = "$ #,##0";
+
+
+                if (i == (IntFilas - 1))
+                {
+                    int FinalData = IntFilas - 1;
+                    int PosFormula = IntFilas;
+                    var cellWithFormula_1 = ws.Cell(PosFormula, 6);
+
+
+
+
+                    Formula = "=SUBTOTAL(9,D2:D" + FinalData.ToString() + ")";
+
+
+                    ws.Cell(PosFormula, 4).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 4).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 4).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,E2:E" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 5).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 5).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 5).Style.NumberFormat.Format = "$ #,##0";
+
+
+
+                    Formula = "=SUBTOTAL(9,F2:F" + FinalData.ToString() + ")";
+
+                    ws.Cell(PosFormula, 6).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 6).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 6).Style.NumberFormat.Format = "$ #,##0";
+
+
+
+                    // Formula = "=SUM(G2:G" + FinalData.ToString() + ")";
+                    Formula = "=SUBTOTAL(9,G2:G" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 7).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 7).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 7).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,H2:H" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 8).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 8).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 8).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,I2:I" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 9).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 9).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 9).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,J2:J" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 10).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 10).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 10).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,K2:K" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 11).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 11).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 11).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,L2:L" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 12).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 12).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 12).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,M2:M" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 13).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 13).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 13).Style.NumberFormat.Format = "$ #,##0";
+
+                    //Formula qUENO SUMA 
+                    Formula = "=IF(M" + PosFormula.ToString() + "=0,0,K" + PosFormula.ToString() + "/M" + PosFormula.ToString() + ")";
+                    //=SI.ERROR(K800/M800;0)
+                    ws.Cell(PosFormula, 14).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 14).Style.NumberFormat.NumberFormatId = 9;
+                    ws.Cell(PosFormula, 14).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,O2:O" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 15).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 15).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 15).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,P2:P" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 16).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 16).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 16).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,Q2:Q" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 17).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 17).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 17).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,R2:R" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 18).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 18).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 18).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,S2:S" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 19).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 19).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 19).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,T2:T" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 20).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 20).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 20).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,U2:U" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 21).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 21).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 21).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,V2:V" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 22).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 22).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 22).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,W2:W" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 23).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 23).Style.NumberFormat.NumberFormatId = 3;
+                    cellWithFormula18.Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,X2:X" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 24).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 24).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 24).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,Y2:Y" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 25).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 25).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 25).Style.NumberFormat.Format = "$ #,##0";
+
+                    Formula = "=SUBTOTAL(9,Z2:Z" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 26).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 26).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 26).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,AA2:AA" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 27).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 27).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 27).Style.NumberFormat.Format = "$ #,##0";
+
+
+                    Formula = "=SUBTOTAL(9,AB2:AB" + FinalData.ToString() + ")";
+                    ws.Cell(PosFormula, 28).FormulaA1 = Formula;
+                    ws.Cell(PosFormula, 28).Style.NumberFormat.NumberFormatId = 3;
+                    ws.Cell(PosFormula, 28).Style.NumberFormat.Format = "$ #,##0";
+
+
+
+
+
+
+
+
+                }
+            }
+
+
+            //formateo de las 28 col
+            int cols = 28;
+            for (int i = 1; i <= cols; i++)
+            {
+                /*
+                $ En Bodega	$ Total	$ Porcentaje	$ Kg Unit	$ Kg en renta	$ Kg en bodega	$ Kg total	$ m2 Unit	$ m2 en Renta	$ m2 en bodega	$ M2 total 	$ Total U 	0,70	$ Falta 	$ Comprar	$ Sobra 	$ Vender
+                */
+                ws.Column(i).AdjustToContents();
+
+                //Totales 
+                // var cellWithFormula27 = ws.Cell(i,IntFilas+1);
+            }
+
+            string tmpForm = "";
+            var cellWithFormula = ws.Cell(6, 777);
+
+
+            //poner titulo al reporte
+            ws.Row(1).InsertRowsAbove(1);
+            ws.Cell(1, 1).Value = DateTime.Now.ToShortDateString();
+
+
+
+
+
+
+
+
+            #endregion
+
+
+        }
 
         protected void BtnExcel_Click(object sender, EventArgs e)
         {
