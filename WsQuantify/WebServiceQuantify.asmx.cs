@@ -290,5 +290,17 @@ namespace WsQuantify
         }
 
 
+        [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public string GetReportAdmin(String StrCodPais, String StrUser, String Strpass)
+        {
+            Apimethod Api_ = new Apimethod();
+            string Strsalida = "";
+            Strsalida = Api_.GetReportAdmin(StrCodPais, StrUser, Strpass);
+            return Strsalida;
+        }
+
+
+
     }
 }

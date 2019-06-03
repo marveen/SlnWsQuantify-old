@@ -1044,6 +1044,12 @@ namespace WsQuantify
                             FormamatWs_StockedItemCostCostumer_CL(ref ws, dt1);
                             FormamatWs_StockedItemCostCostumer_CL(ref ws2, dt2);
                             break;
+
+                        case "ReportAdmin_CL.xlsx":
+                            ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
+                            //FormamatWs_RportAdmin_CL(ref ws, DsetReport.Tables[0]);
+
+                            break;
                     }
 
 
@@ -1082,6 +1088,7 @@ namespace WsQuantify
 
 
 
+
                             // ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
 
                             break;
@@ -1111,6 +1118,13 @@ namespace WsQuantify
 
 
                             break;
+
+                        case "ReportAdmin_CL.xlsx":
+                            ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
+                            //FormamatWs_RportAdmin_CL(ref ws, DsetReport.Tables[0]);
+
+                            break;
+
                     }
 
                     break;
@@ -1132,6 +1146,12 @@ namespace WsQuantify
                             ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
                             FormamatWs_StockedItemCostCostumer_CL(ref ws, DsetReport.Tables[0]);
                          break;
+
+                        case "ReporteAdmin_CL.xlsx":
+                            ws = workbook.Worksheets.Add(DsetReport.Tables[0]);
+                            FormamatWs_RportAdmin_CL(ref ws, DsetReport.Tables[0]);
+
+                            break;
 
 
 
@@ -1168,6 +1188,19 @@ namespace WsQuantify
             }
 
             httpResponse.End();
+
+        }
+
+
+        protected void FormamatWs_RportAdmin_CL(ref IXLWorksheet ws, DataTable Ladata)
+        {
+
+            #region StockedItemCost_CL
+
+
+           
+
+            #endregion
 
         }
 
@@ -1617,6 +1650,8 @@ namespace WsQuantify
             String StrFilename = "Filename";
             StrFilename = ddlReporte.SelectedValue;
 
+            DivLoading.Visible = true;
+
 
             switch (StrFilename)
             {
@@ -1629,6 +1664,7 @@ namespace WsQuantify
                     StrJsonReport = Wsneed.GetProductoReport(_strpais,  _StrUser, _Strpass);
                     DsetReport = GetDataSet(StrJsonReport);
                     GeneraExcel(StrFilename);
+                    DivLoading.Visible = false;
 
                     break;
 
@@ -1638,6 +1674,17 @@ namespace WsQuantify
                     StrJsonReport = Wsneed.GetReportCustomerSL(_strpais, _StrUser, _Strpass);
                     DsetReport = GetDataSet(StrJsonReport);
                     GeneraExcel(StrFilename);
+                    DivLoading.Visible = false;
+                    break;
+
+                case "ReportAdmin":
+
+                    StrFilename = "ReporteAdmin_CL.xlsx";
+                    StrJsonReport = Wsneed.GetReportAdmin(_strpais, _StrUser, _Strpass);
+                    DsetReport = GetDataSet(StrJsonReport);
+                    GeneraExcel(StrFilename);
+                    DivLoading.Visible = false;
+
                     break;
 
                 case "demo":
@@ -1728,7 +1775,7 @@ namespace WsQuantify
 
 
 
-
+           
 
         }
     }

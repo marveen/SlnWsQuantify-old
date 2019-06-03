@@ -67,6 +67,12 @@
 
                 </div>
 
+                <div id="DivLoading" runat="server" visible="false" style="color:white; background-color:darkblue; font-size:15px; font-weight:bolder; padding:20px; position:absolute; top:0px; height:40px; width:100%">
+                     
+                    Cargando..
+
+                </div>
+
                 <div align="center">
 
                 
@@ -85,7 +91,8 @@
                             <p>
                                 <asp:DropDownList ID="ddlReporte" runat="server" Height="25px" Width="205px">
                                      <asp:ListItem Selected="True" Value="StockedItemCost">Stocked Item Cost</asp:ListItem>
-                                     <asp:ListItem Value="StockedItemCostCostumer">Stocked Item Cost Costumer</asp:ListItem>
+                                     <asp:ListItem Value="StockedItemCostCotumer">Stocked Item Cost Costumer</asp:ListItem>
+                                     <asp:ListItem Value="ReportAdmin">Reporte Por Admin</asp:ListItem>                                  
                                  </asp:DropDownList>
 
                                 

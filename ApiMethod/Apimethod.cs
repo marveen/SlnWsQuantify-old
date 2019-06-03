@@ -33,12 +33,352 @@ namespace Quantify.API
         }
 
         //Reporte 3 
-        public string GetReport3(String StrCodPais, String StrUser, String Strpass)
+        public string GetReportAdmin(String StrCodPais, String StrUser, String Strpass)
         {
             string StraSalida = "";
 
+            String StrSalida = "";
 
-            return StraSalida;
+            try
+            {
+
+                AvontusPrincipal.Logout();
+                string Conex = Avontus.Rental.Library.Settings.CommonConfigurationSettings.ConnectionString;
+                string strdbname;
+                strdbname = "quantify-srv02\\SQLUN" + StrCodPais;
+                System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+                builder.ConnectionString = Conex;
+                builder.DataSource = strdbname;
+
+                //Base de Datos Rotativa                                
+                Avontus.Rental.Library.Settings.CommonConfigurationSettings.ConnectionString = builder.ConnectionString;
+                String StrUsrQtfy = StrUser; // ConfigurationManager.AppSettings["UsrQtfy"];
+                String StrPassQtfy = Strpass; // ConfigurationManager.AppSettings["PassQtfy"];
+                bool success = AvontusPrincipal.Login(StrUsrQtfy, StrPassQtfy);
+
+
+                if (success)
+                {
+                    AvontusUser AvUser = AvontusUser.GetUser(StrUsrQtfy);
+
+                    BusinessPartnerComboList BpatList = BusinessPartnerComboList.GetCustomerComboList(Guid.Empty, ActiveStatus.Active, ActiveStatus.Active, false, false);
+
+                    DataSet orgData = StockingLocationOrganization.GetOrganizationData(ActiveStatus.Active);
+
+                    StockingLocationOrganization slo = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
+
+                    // ProductCollection proc = ProductCollection.GetProductCollection(ProductType.All);
+
+
+
+                    
+                    
+
+                    DataTable locations = orgData.Tables[0];
+
+                    locations.DefaultView.Sort = "CustomerName ASC";
+                    DataTable DwLocationsSorted = locations.DefaultView.ToTable();
+
+
+                    //subtables de consulta 
+                    DataView dv = new DataView(locations);
+                    dv.RowFilter = "TradingPartnerType = 3"; // query example = "id = 10"
+
+
+                    DataView dv2 = new DataView(locations);
+                    dv2.RowFilter = "TradingPartnerType = 4 "; // query example = "id = 10"
+
+
+
+
+
+
+                    //Armando Tabla de Salida
+
+                    //* Exportacion Objeto Dataset Limpio*//
+                    DataSet dataSetProducts = new DataSet("Ds_ReportCustomerSL");
+                    dataSetProducts.Namespace = "Quantify";
+                    DataTable TblReportAdmin = new DataTable();
+                    TblReportAdmin.TableName = "TblReportAdmin";
+
+
+                    DataColumn ColIdProd = new DataColumn("IdProducto", typeof(string));
+                    DataColumn ColProducto = new DataColumn("Producto", typeof(string));
+
+                    TblReportAdmin.Columns.Add(ColIdProd);
+                    TblReportAdmin.Columns.Add(ColProducto);
+
+                    //3 columnas dinamicas 
+                    int ContaColumnas = 0; 
+
+                    foreach (DataRow PivotDrow in DwLocationsSorted.Rows)
+                    {
+                        bool AgregarTotal = false;
+                        String Strbodega = "";
+
+
+                        String StrCliente = (PivotDrow["CustomerName"].ToString() != null) ? PivotDrow["CustomerName"].ToString() : "NoName";
+                        String StrStockingLocation = (PivotDrow["StockingLocationID"].ToString() != null) ? PivotDrow["StockingLocationID"].ToString() : "NoName";
+
+
+
+                        if (StrCliente.Length == 0)
+                        {
+                            continue;
+                        }
+
+
+                        String StrLocId = (PivotDrow["StockingLocationID"].ToString() != null) ? PivotDrow["StockingLocationID"].ToString() : "NoData";
+                        String StrName = (PivotDrow["Name"].ToString() != null) ? PivotDrow["Name"].ToString() : "NoName";
+
+                        String StrNumber = (PivotDrow["Number"].ToString() != null) ? PivotDrow["Number"].ToString() : "NoName";
+                        String StrJobEmployee1ID = (PivotDrow["JobEmployee1ID"].ToString() != null) ? PivotDrow["JobEmployee1ID"].ToString() : "NoName";
+
+                        JobsitePropertiesItem jsite = JobsitePropertiesItem.GetJobsitePropertiesItem(Guid.Parse(StrStockingLocation.ToString()));
+
+                        String StrAdminProyecto = (jsite.JobEmployee1 != null) ? jsite.JobEmployee1.ToString() : "No Data";
+
+
+                        if (StrStockingLocation.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        Guid GidStockingLocation = new Guid();
+                        GidStockingLocation = new Guid(StrStockingLocation);
+
+                       // StockedProductList StockedPrds = StockedProductList.GetStockedProductList(GidStockingLocation, Guid.Empty, ProductType.All);
+                        StockingLocation Local2 = StockingLocation.GetStockingLocation(Guid.Parse(StrLocId), true, true);
+
+
+                        StrName = Local2.FormattedName.ToString();
+                        StrLocId = Local2.StockingLocationID.ToString();
+
+
+                        DataColumn ColBodega = new DataColumn(StrName, typeof(string))
+                        {
+                            DefaultValue = "0",
+                            Unique = false
+                        };
+
+                        //ColBodega.ColumnName = StrName;
+
+
+                        //posria ser un id una vez cobinado la celda 
+                        String StrTmpstr = Guid.NewGuid().ToString();
+                        DataColumn ColBodega2 = new DataColumn(StrLocId, typeof(string))
+                        {
+                            DefaultValue = "0",
+                            Unique = false
+                        };
+
+                        //ColBodega_.ColumnName = StrTmpstr;
+
+
+                        if (ContaColumnas == 500)
+                        {
+
+                            //break;
+                        }
+
+
+
+                        try
+                        {
+                          TblReportAdmin.Columns.Add(ColBodega);                       
+                          TblReportAdmin.Columns.Add(ColBodega2);
+
+
+                        }
+                        catch (Exception aa)
+                        {
+                            string aaa = aa.StackTrace.ToString();
+
+                            throw;
+                        }
+
+
+                  
+
+                        ContaColumnas = ContaColumnas + 2;
+
+
+                    }
+
+
+
+                    //Columnas x Locacion
+
+
+                    //2 fijas por totales 
+                    DataColumn colTotalCost = new DataColumn("Total Cost", typeof(string));
+                    DataColumn colTotalArriendo = new DataColumn("Total Weigth", typeof(string));
+
+                    colTotalArriendo.DefaultValue = "0";
+                    colTotalCost.DefaultValue = "0";
+                    TblReportAdmin.Columns.Add(colTotalCost);
+                    TblReportAdmin.Columns.Add(colTotalArriendo);
+
+
+
+                    //////////////// ****  pivot por productos 
+                    ///
+                    ProductCollection proc2 = ProductCollection.GetProductCollection(ProductType.Product);
+
+                    ProductCategoryComboList ProducCat = ProductCategoryComboList.GetProductCategoryComboList(ProductType.Product);
+
+                    int intConta = 0;
+                    foreach (Product PivotProduct in proc2)
+                    {
+
+                        bool bolFlag = false;
+                        if (intConta == 0)
+                        {
+                            DataRow tmprowtop = TblReportAdmin.NewRow();
+
+                            //hacer la primera fila 
+                            tmprowtop["IdProducto"] = "";
+                            tmprowtop["Producto"] = "";
+
+
+                            for (int i = 2; i < ContaColumnas + 2; i = i + 2)
+                            {
+                                tmprowtop[i] = "Cost En Arriendo";
+                                tmprowtop[i+1] = "Weight En Arriendo";
+
+                            }
+                            tmprowtop["Total Cost"] = "0";
+                            tmprowtop["Total Weigth"] = "0";
+
+                            TblReportAdmin.AcceptChanges();
+                            TblReportAdmin.Rows.Add(tmprowtop);
+
+                        }
+
+
+                        DataRow TmpRowProducto = TblReportAdmin.NewRow();
+
+                        TmpRowProducto["IdProducto"] = PivotProduct.PartNumber.ToString();
+                        TmpRowProducto["Producto"] = PivotProduct.Description.ToString();
+
+                        //el for por cada 0 de las columnas paja 
+
+
+                        //este hay que buscarlo por ProductID y location 
+
+                        string StrlocationBusca = "";
+                        string StrIdlocationBusca = "";
+                        string StrProductBusca = "";
+                        double?  QuantyOnRent = 0;
+                        decimal? DectotalCost = 0;
+                        decimal? TotalDectotalCost = 0;
+                        double? DectotalWeigth = 0;
+
+
+
+                        for (int i = 2; i < ContaColumnas + 2; i = i + 2)
+                        {
+                            //el cost y el weigth;
+                            StrlocationBusca = TblReportAdmin.Columns[i].ColumnName.ToString();
+                            StrIdlocationBusca = TblReportAdmin.Columns[i + 1].ColumnName.ToString();
+                            StrProductBusca = PivotProduct.Description.ToString();
+
+                            Guid GidStockingLocation = new Guid();
+                            GidStockingLocation = new Guid(StrIdlocationBusca);
+
+                            StockedProductList StockedPrds = StockedProductList.GetStockedProductList(GidStockingLocation, Guid.Empty, ProductType.Product);
+
+                            //  StockedProductListItem slitst = StockedPrds.Select(person => person.Description);
+
+                            var test2 = StockedPrds.Where(prodi => prodi.Description == StrProductBusca);
+
+                            foreach (var item in test2)
+                            {
+
+
+                                QuantyOnRent = item.QuantityOnRent;
+                                DectotalCost = item.DefaultCost;
+                                DectotalWeigth = item.WeightOnRent;
+                                TotalDectotalCost = (int)QuantyOnRent * DectotalCost;
+
+
+
+                               TmpRowProducto[i] = TotalDectotalCost.ToString();
+                               TmpRowProducto[i + 1] = DectotalWeigth.ToString();
+
+                            }
+                         
+
+                       
+
+
+                            //TmpRowProducto[i] = "0";
+                            //TmpRowProducto[i + 1] = "1";
+                                              
+
+                        }
+
+
+                       
+
+                        TmpRowProducto["Total Cost"] = "0";
+                        TmpRowProducto["Total Weigth"] = "0";
+
+                        TblReportAdmin.Rows.Add(TmpRowProducto);
+                        TblReportAdmin.AcceptChanges();
+
+                        intConta = intConta +1;
+
+
+                        if (intConta == 10)
+                        {
+                            break;
+                        }
+
+                    }
+
+
+                    TblReportAdmin.AcceptChanges();
+
+                    //desciption de producto es cadauno un fila wn 
+
+                    //////////////// ****
+
+
+
+                    //bodega HDP
+
+                    dataSetProducts.Tables.Add(TblReportAdmin);
+
+
+                    //marcar al cambiar el nmbre de Customername
+
+                    String StrClientLoop = "";
+                    int IntConta = 1;
+
+
+                    decimal? Total_SumaTotalCost = 0;
+                    decimal? Total_SumaListOnRent = 0;
+                    double? Total_SumaWeight = 0;
+
+           
+
+                    dataSetProducts.AcceptChanges();
+                    StrSalida = JsonConvert.SerializeObject(dataSetProducts, Formatting.Indented);
+
+                }
+            }
+
+
+            catch (Exception ex)
+            {
+                StrSalida = ex.InnerException.ToString();
+
+
+            }
+            return StrSalida;
+
+
         }
         
         //Reporte 2         
