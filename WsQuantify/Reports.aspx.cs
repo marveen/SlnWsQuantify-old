@@ -1154,10 +1154,6 @@ namespace WsQuantify
                             FormamatWs_RportAdmin_CL(ref ws, DsetReport.Tables[0]);
 
                             break;
-
-
-
-
                     }
 
                            
@@ -1216,25 +1212,59 @@ namespace WsQuantify
             int intLargoTabla = 0;
             intLargoTabla = Ladata.Rows.Count;
 
-            for (int i = 2; i < intLargoTabla; i++)
+            for (int i = 2; i <= intLargoTabla; i++)
             {
                 var cellWithFormula20 = ws.Cell(i, 5);
                 cellWithFormula20.SetDataType(XLDataType.Number);
                 cellWithFormula20.Style.NumberFormat.NumberFormatId = 4;
 
 
-
-
                 var cellWithFormula21 = ws.Cell(i, 6);
                 cellWithFormula21.SetDataType(XLDataType.Number);
                 cellWithFormula21.Style.NumberFormat.NumberFormatId = 4;
-            }
 
+
+                var cellWithFormula22 = ws.Cell(i, 7);
+                cellWithFormula22.SetDataType(XLDataType.Number);
+                cellWithFormula22.Style.NumberFormat.NumberFormatId = 4;
+
+
+            }
 
             //poner titulo al reporte
             ws.Row(1).InsertRowsAbove(1);
             ws.Cell(1, 1).Value = DateTime.Now.ToShortDateString();
 
+
+            //poner totales en reporte 
+
+            int intlargo2 = intLargoTabla + 1;
+            String _Formula = "=SUBTOTAL(9,E3:E" + intlargo2.ToString() + ")";
+            var _cellWithFormula20 = ws.Cell(intLargoTabla+2, 5);
+            _cellWithFormula20.FormulaA1 = _Formula;
+            _cellWithFormula20.SetDataType(XLDataType.Number);
+            _cellWithFormula20.Style.NumberFormat.NumberFormatId = 4;
+            _cellWithFormula20.Style.NumberFormat.Format = "$ #,##0";
+
+
+             _Formula = "=SUBTOTAL(9,F3:F" + intlargo2.ToString() + ")";
+            var _cellWithFormula21 = ws.Cell(intLargoTabla+2, 6);
+            _cellWithFormula21.FormulaA1 = _Formula;
+            _cellWithFormula21.SetDataType(XLDataType.Number);
+            _cellWithFormula21.Style.NumberFormat.NumberFormatId = 4;
+            _cellWithFormula21.Style.NumberFormat.Format = "$ #,##0";
+
+             _Formula = "=SUBTOTAL(9,G3:G" + intlargo2.ToString() + ")";
+            var _cellWithFormula22 = ws.Cell(intLargoTabla+2, 7);
+            _cellWithFormula22.FormulaA1 = _Formula;
+            _cellWithFormula22.SetDataType(XLDataType.Number);
+            _cellWithFormula22.Style.NumberFormat.NumberFormatId = 4;
+    
+
+            ////
+
+
+           
 
 
             //formateo de las 28 col

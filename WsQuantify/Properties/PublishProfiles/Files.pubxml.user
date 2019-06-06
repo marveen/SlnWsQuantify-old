@@ -70,7 +70,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/11/2018 00:55:18</publishTime>
     </File>
     <File Include="bin/Quantify.API.dll">
-      <publishTime>06/05/2019 17:24:53</publishTime>
+      <publishTime>06/06/2019 04:52:33</publishTime>
     </File>
     <File Include="bin/Quantify.API.dll.config">
       <publishTime>12/11/2018 00:55:18</publishTime>
@@ -79,7 +79,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>03/15/2017 03:09:31</publishTime>
     </File>
     <File Include="bin/Quantify.API.pdb">
-      <publishTime>06/05/2019 17:24:53</publishTime>
+      <publishTime>06/06/2019 04:52:33</publishTime>
     </File>
     <File Include="bin/System.IO.FileSystem.Primitives.dll">
       <publishTime>06/11/2016 23:13:46</publishTime>
@@ -88,10 +88,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>06/11/2016 23:13:48</publishTime>
     </File>
     <File Include="bin/WsQuantify.dll">
-      <publishTime>06/05/2019 20:50:28</publishTime>
+      <publishTime>06/06/2019 04:52:34</publishTime>
     </File>
     <File Include="bin/WsQuantify.pdb">
-      <publishTime>06/05/2019 20:50:28</publishTime>
+      <publishTime>06/06/2019 04:52:34</publishTime>
     </File>
     <File Include="controls/fileViewer.ascx">
       <publishTime>04/30/2019 06:31:48</publishTime>
@@ -2041,7 +2041,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/03/2019 01:02:34</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/05/2019 18:31:27</publishTime>
+      <publishTime>06/06/2019 03:16:14</publishTime>
     </File>
     <File Include="WebServiceQuantify.asmx">
       <publishTime>12/11/2018 00:55:18</publishTime>
