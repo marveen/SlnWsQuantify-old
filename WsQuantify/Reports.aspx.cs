@@ -17,6 +17,8 @@ namespace WsQuantify
 
         DataSet DsetReport = new DataSet();
         WsQuantify.WebServiceQuantify Wsneed = new WebServiceQuantify();
+        
+
 
         String StrJsonReport = "";
         string _StrUser, _Strpass, _strpais;
@@ -1650,7 +1652,7 @@ namespace WsQuantify
             String StrFilename = "Filename";
             StrFilename = ddlReporte.SelectedValue;
 
-            DivLoading.Visible = true;
+            //DivLoading.Visible = true;
 
 
             switch (StrFilename)
@@ -1668,7 +1670,7 @@ namespace WsQuantify
 
                     break;
 
-                case "StockedItemCostCostumer":
+                case "StockedItemCostCotumer":
 
                     StrFilename = "StockedItemCostCostumer_CL.xlsx";
                     StrJsonReport = Wsneed.GetReportCustomerSL(_strpais, _StrUser, _Strpass);
@@ -1680,7 +1682,10 @@ namespace WsQuantify
                 case "ReportAdmin":
 
                     StrFilename = "ReporteAdmin_CL.xlsx";
+                    //Wsneed.Session.Timeout = 90;
+
                     StrJsonReport = Wsneed.GetReportAdmin(_strpais, _StrUser, _Strpass);
+
                     DsetReport = GetDataSet(StrJsonReport);
                     GeneraExcel(StrFilename);
                     DivLoading.Visible = false;

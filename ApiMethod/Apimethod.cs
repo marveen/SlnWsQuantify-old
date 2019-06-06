@@ -223,15 +223,23 @@ namespace Quantify.API
 
                     //////////////// ****  pivot por productos 
                     ///
-                    ProductCollection proc2 = ProductCollection.GetProductCollection(ProductType.Product);
+                    //ProductCollection proc2 = ProductCollection.GetProductCollection(ProductType.Product);
 
                     ProductCategoryComboList ProducCat = ProductCategoryComboList.GetProductCategoryComboList(ProductType.Product);
 
+                   
                     int intConta = 0;
-                    foreach (Product PivotProduct in proc2)
+                    foreach (ProductCategory PivotCat in ProducCat)
                     {
+                        if (PivotCat.Name == " (none)")
+                        {
+                            //next
+                            continue;
+                        }
 
                         bool bolFlag = false;
+
+                        //agrega finla con subtitulos
                         if (intConta == 0)
                         {
                             DataRow tmprowtop = TblReportAdmin.NewRow();
@@ -258,8 +266,8 @@ namespace Quantify.API
 
                         DataRow TmpRowProducto = TblReportAdmin.NewRow();
 
-                        TmpRowProducto["IdProducto"] = PivotProduct.PartNumber.ToString();
-                        TmpRowProducto["Producto"] = PivotProduct.Description.ToString();
+                        TmpRowProducto["IdProducto"] = PivotCat.ProductCategoryID.ToString();
+                        TmpRowProducto["Producto"] = PivotCat.Name.ToString();
 
                         //el for por cada 0 de las columnas paja 
 
@@ -268,11 +276,14 @@ namespace Quantify.API
 
                         string StrlocationBusca = "";
                         string StrIdlocationBusca = "";
-                        string StrProductBusca = "";
+                        string StrIdCatBusca = "";
                         double?  QuantyOnRent = 0;
                         decimal? DectotalCost = 0;
+
                         decimal? TotalDectotalCost = 0;
-                        double? DectotalWeigth = 0;
+                        double? TotalDecWeigth = 0;
+
+
 
 
 
@@ -281,48 +292,50 @@ namespace Quantify.API
                             //el cost y el weigth;
                             StrlocationBusca = TblReportAdmin.Columns[i].ColumnName.ToString();
                             StrIdlocationBusca = TblReportAdmin.Columns[i + 1].ColumnName.ToString();
-                            StrProductBusca = PivotProduct.Description.ToString();
+                            StrIdCatBusca = PivotCat.ProductCategoryID.ToString();
 
                             Guid GidStockingLocation = new Guid();
                             GidStockingLocation = new Guid(StrIdlocationBusca);
 
-                            StockedProductList StockedPrds = StockedProductList.GetStockedProductList(GidStockingLocation, Guid.Empty, ProductType.Product);
+                            Guid GidCategory = new Guid(StrIdCatBusca);
+                             
 
-                            //  StockedProductListItem slitst = StockedPrds.Select(person => person.Description);
+                            StockedProductList StockedPrds = StockedProductList.GetStockedProductList(GidStockingLocation, GidCategory, ProductType.Product);
 
-                            var test2 = StockedPrds.Where(prodi => prodi.Description == StrProductBusca);
+                          
 
-                            foreach (var item in test2)
+                            DectotalCost = 0;
+                            foreach (var item in StockedPrds)
                             {
-
-
-                                QuantyOnRent = item.QuantityOnRent;
-                                DectotalCost = item.DefaultCost;
-                                DectotalWeigth = item.WeightOnRent;
-                                TotalDectotalCost = (int)QuantyOnRent * DectotalCost;
-
-
-
-                               TmpRowProducto[i] = TotalDectotalCost.ToString();
-                               TmpRowProducto[i + 1] = DectotalWeigth.ToString();
-
+                                DectotalCost = DectotalCost + (item.DefaultCost * (decimal)item.QuantityOnRent);
                             }
-                         
-
-                       
 
 
-                            //TmpRowProducto[i] = "0";
-                            //TmpRowProducto[i + 1] = "1";
-                                              
+
+                            TmpRowProducto[i] = DectotalCost.ToString();
+                            TmpRowProducto[i + 1] = StockedPrds.TotalWeight;
+
+                            //sumar totales generales 
+                            TotalDectotalCost = TotalDectotalCost + DectotalCost;
+                            TotalDecWeigth = TotalDecWeigth + StockedPrds.TotalWeight;
+
+                            string Strvalo;
+
+                            //Strvalo = StockedPrds.GetSum("DefaultCost").ToString();
+                           
+
+                            bolFlag = false;
+
+
+
 
                         }
 
 
-                       
 
-                        TmpRowProducto["Total Cost"] = "0";
-                        TmpRowProducto["Total Weigth"] = "0";
+
+                        TmpRowProducto["Total Cost"] = TotalDectotalCost.ToString();
+                        TmpRowProducto["Total Weigth"] = TotalDecWeigth.ToString();
 
                         TblReportAdmin.Rows.Add(TmpRowProducto);
                         TblReportAdmin.AcceptChanges();
@@ -332,7 +345,7 @@ namespace Quantify.API
 
                         if (intConta == 10)
                         {
-                            break;
+                           // break;
                         }
 
                     }
@@ -557,20 +570,21 @@ namespace Quantify.API
                         {
                             double? tmppW = 0; 
                             tmppW =  (item.Weight != null) ? item.Weight : 0;
-                            SumaWeight = SumaWeight + tmppW;
+                            SumaWeight = (tmppW * item.QuantityOnRent)+ SumaWeight;
+
 
                             decimal? tmpC = 0;
                             tmpC = (item.DefaultCost != null) ? item.DefaultCost : 0;
-                            SumaTotalCost = SumaTotalCost + tmpC;
+                            SumaTotalCost = (tmpC * (decimal)item.QuantityOnRent) + SumaTotalCost;
 
 
                             decimal? tmpRent = 0;
                             tmpRent = (item.DefaultList != null) ? item.DefaultList : 0;
-                            SumaListOnRent = SumaListOnRent + tmpRent;
+                            SumaListOnRent = (tmpRent * (decimal)item.QuantityOnRent) + SumaListOnRent;
 
                         }
 
-                        if (StrName == "ALGARROBAL III")
+                        if (StrNumber == "A0011596")
 
                         {
                             string straalgo;
@@ -582,13 +596,6 @@ namespace Quantify.API
 
                         StockingLocation Local2 = StockingLocation.GetStockingLocation(Guid.Parse(StrLocId), true, true);
 
-                        //bodega
-                        /* if (Local2.ParentTradingPartner.ParentTradingPartner.ParentTradingPartner != null)
-                         {
-                             TempRow["Bodega"] = Local2.ParentTradingPartner.ParentTradingPartner.ParentTradingPartner.Name;
-                         }
-                         else 
-                         */
                         TempRow["Bodega"] = Local2.ParentBranchOrLaydown.FormattedName;
 
                         if (Local2.ParentTradingPartner.ParentTradingPartner != null)
@@ -606,14 +613,9 @@ namespace Quantify.API
 
                         TempRow["Bodega"] = Local2.ParentBranchOrLaydown.FormattedName;
 
-                        
-
-
-
-
                         TempRow["List en Arriendo"] = SumaListOnRent.ToString();
                         TempRow["Total Cost"] = SumaTotalCost.ToString();
-                        TempRow["Weight En Arriendo"] = SumaWeight.ToString();
+                        TempRow["Weight En Arriendo"] = StockedPrds.TotalWeight;
 
 
                         //Antes de cerrar hay que poner la suma 
