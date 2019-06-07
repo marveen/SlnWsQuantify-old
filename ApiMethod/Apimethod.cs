@@ -424,7 +424,7 @@ namespace Quantify.API
 
                     DataSet orgData = StockingLocationOrganization.GetOrganizationData(ActiveStatus.Active);
 
-                    StockingLocationOrganization slo = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
+                   // StockingLocationOrganization slo = StockingLocationOrganization.GetOrganization(ActiveStatus.Active);
 
                     DataTable locations = orgData.Tables[0];
 

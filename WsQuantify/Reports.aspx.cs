@@ -1217,16 +1217,18 @@ namespace WsQuantify
                 var cellWithFormula20 = ws.Cell(i, 5);
                 cellWithFormula20.SetDataType(XLDataType.Number);
                 cellWithFormula20.Style.NumberFormat.NumberFormatId = 4;
-
+                cellWithFormula20.Style.NumberFormat.Format = "$ #,##0";
 
                 var cellWithFormula21 = ws.Cell(i, 6);
                 cellWithFormula21.SetDataType(XLDataType.Number);
                 cellWithFormula21.Style.NumberFormat.NumberFormatId = 4;
+                cellWithFormula21.Style.NumberFormat.Format = "$ #,##0";
 
 
                 var cellWithFormula22 = ws.Cell(i, 7);
                 cellWithFormula22.SetDataType(XLDataType.Number);
                 cellWithFormula22.Style.NumberFormat.NumberFormatId = 4;
+                //cellWithFormula22.Style.NumberFormat.Format = "$ #,##0";
 
 
             }
